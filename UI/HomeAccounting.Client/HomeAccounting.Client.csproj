@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Shared\HomeAccounting.Shared.csproj" />
+		<ProjectReference Include="..\HomeAccounting.Shared\HomeAccounting.Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

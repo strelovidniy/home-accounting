@@ -11,16 +11,15 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.OData" Version="8.1.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\HomeAccounting.Domain\HomeAccounting.Domain.csproj" />
-		<ProjectReference Include="..\Client\HomeAccounting.Client.csproj" />
+		<ProjectReference Include="..\..\UI\HomeAccounting.Client\HomeAccounting.Client.csproj" />
+		<ProjectReference Include="..\HomeAccounting.Domain\HomeAccounting.Domain.csproj" />
 	</ItemGroup>
-
 
 </Project>
