@@ -1,0 +1,274 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using MudBlazor
+
+@inherits LayoutComponentBase;
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+@if (IsAuth)
+{
+    <MudLayout>
+        @Body
+    </MudLayout>
+}
+else
+{
+    <MudLayout>
+    <MudAppBar Elevation="0">
+        <MudIconButton Color="Color.Inherit"
+                       Edge="Edge.Start"
+                       Icon="@Icons.Material.Filled.Menu"
+                       OnClick="@(() => _drawerOpen = !_drawerOpen)"/>
+
+        <MudText Typo="Typo.body1"
+                 Class="mr-5 text-white">
+            Some text here
+        </MudText>
+        <MudSpacer/>
+
+        <MudHidden Breakpoint="Breakpoint.MdAndUp"
+                   Invert="true">
+            <MudText Typo="Typo.h6"
+                     Class="text-white">
+                Some text here
+            </MudText>
+            <MudDivider
+                Vertical="true"
+                FlexItem="true"
+                DividerType="DividerType.Middle"
+                Class="mx-4 my-5"/>
+            <MudText Typo="Typo.body1"
+                     Class="mr-5 text-white">
+                Some text here
+            </MudText>
+        </MudHidden>
+
+        <MudMenu Direction="Direction.Left"
+                 OffsetX="true"
+                 Dense="true">
+            <ActivatorContent>
+                @if (string.IsNullOrEmpty(_currentUser?.ImageDataUrl))
+                {
+                    <MudAvatar Color="Color.Success"
+                               Rounded="true"
+                               Style="background-color: #FFD580 !important; color: black !important; font-size: 15px !important; height: 40px !important; width: 160px !important;">
+                        <strong>
+                            @FullName
+                        </strong>
+                    </MudAvatar>
+                }
+                else
+                {
+                    <MudAvatar Image="@_currentUser.ImageDataUrl"
+                               Style="height: 50px; width: 50px;">
+                    </MudAvatar>
+                }
+            </ActivatorContent>
+            <ChildContent>
+                <UserCard Class="mt-n2"
+                          CurrentUser="@_currentUser"/>
+                <MudDivider Class="mb-2"/>
+
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Error"
+                           Style="margin-left: 5%; width: 90%;"
+                           Size="Size.Small"
+                           OnClick="@Logout">
+                    Logout
+                </MudButton>
+
+            </ChildContent>
+        </MudMenu>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@_drawerOpen"
+               Elevation="0"
+               Class="bg-light border-right">
+        <MudDrawerHeader>
+            <div class="d-flex flex-column align-items-center justify-content-center w-100">
+                <img src=".\images\Logo.png"
+                     class="img-fluid"
+                     alt="Logo"/>
+            </div>
+        </MudDrawerHeader>
+
+        <MudNavMenu Style="color: black !important">
+            <MudNavLink Href="/"
+                        Match="NavLinkMatch.All"
+                        Icon="@Icons.Filled.Dashboard">
+                Home
+            </MudNavLink>
+
+            <MudNavLink Href="/page1"
+                        Match="NavLinkMatch.All"
+                        Icon="@Icons.TwoTone.ViewList">
+                Page 1
+            </MudNavLink>
+
+
+            <MudNavLink Href="/page2"
+                        Match="NavLinkMatch.All"
+                        Icon="@Icons.TwoTone.Comment">
+                Page 2
+            </MudNavLink>
+
+            <MudNavLink Href="/page3"
+                        Match="NavLinkMatch.All"
+                        Icon="@Icons.Filled.CalendarToday">
+                Page 3
+            </MudNavLink>
+
+            <MudNavLink Href="/page4"
+                        Match="NavLinkMatch.All"
+                        Icon="@Icons.Filled.Inventory2">
+                Page 4
+            </MudNavLink>
+
+            <MudNavLink Href="/page5"
+                        Match="NavLinkMatch.All"
+                        Icon="@Icons.Custom.FileFormats.FileExcel">
+                Page 5
+            </MudNavLink>
+
+            <MudNavGroup Title="Administration"
+                         @bind-Expanded="@_adminExpanded"
+                         Icon="@Icons.Filled.AdminPanelSettings">
+
+                <MudNavLink Href="/admin/page1"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.GroupAdd">
+                    Admin page 1
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page2"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.People">
+                    Admin page 2
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page3"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.Report">
+                    Admin page 3
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page4"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.AdminPanelSettings">
+                    Admin page 4
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page5"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.FileUpload">
+                    Admin page 5
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page6"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.Work">
+                    Admin page 6
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page7"
+                            Icon="@Icons.TwoTone.Home">
+                    Admin page 7
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page8"
+                            Icon="@Icons.TwoTone.PrivacyTip">
+                    Admin page 8
+                </MudNavLink>
+
+                <MudNavLink Href="/admin/page9"
+                            Match="NavLinkMatch.All"
+                            Icon="@Icons.TwoTone.Code">
+                    Admin page 9
+                </MudNavLink>
+            </MudNavGroup>
+
+            <MudNavGroup Title="Settings"
+                         @bind-Expanded="@_settingsExpanded"
+                         Icon="@Icons.Filled.Settings">
+
+                <MudNavLink Href="/settings/page1"
+                            Icon="@Icons.TwoTone.Category">
+                    Settings page 1
+                </MudNavLink>
+
+                <MudNavLink Href="/settings/page2"
+                            Icon="@Icons.TwoTone.Task">
+                    Settings page 2
+                </MudNavLink>
+
+                <MudNavLink Href="/settings/page3"
+                            Icon="@Icons.TwoTone.Badge">
+                    Settings page 3
+                </MudNavLink>
+
+                <MudNavLink Href="/settings/page4"
+                            Icon="@Icons.TwoTone.Comment">
+                    Settings page 4
+                </MudNavLink>
+
+                <MudNavLink Href="/settings/page5"
+                            Icon="@Icons.TwoTone.TaxiAlert">
+                    Settings page 5
+                </MudNavLink>
+
+                <MudNavLink Href="/settings/page6"
+                            Icon="@Icons.TwoTone.Topic">
+                    Settings page 6
+                </MudNavLink>
+            </MudNavGroup>
+        </MudNavMenu>
+    </MudDrawer>
+
+    <MudMainContent Class="h-100">
+
+        <MudContainer MaxWidth="MaxWidth.False"
+                      Style="min-height: calc(100% - calc(var(--mud-appbar-min-height) - 16px)); padding-bottom: 72px; padding-top: 24px;"
+                      Class="position-relative">
+            @Body
+        </MudContainer>
+
+        <MudAppBar Elevation="0"
+                   Fixed="false"
+                   Dense="true"
+                   Class="ml-0 w-100 bg-light"
+                   Bottom="true"
+                   Style="bottom: 0; position: fixed;">
+            <MudText Color="@Color.Dark">
+                Copyright © 2023
+                <MudLink Href="#"
+                         Underline="@Underline.Always">
+                    Home Accounting
+                </MudLink>
+                The Disclaimer Team
+            </MudText>
+            <MudSpacer/>
+            <MudText>
+                <MudLink Href="#"
+                         Underline="@Underline.Always"
+                         Class="mr-3">
+                    Privacy Policy
+                </MudLink>
+                <MudLink Href="#"
+                         Underline="@Underline.Always">
+                    Contact Us
+                </MudLink>
+            </MudText>
+        </MudAppBar>
+    </MudMainContent>
+
+    </MudLayout>
+
+    <MudScrollToTop>
+        <MudFab Color="Color.Tertiary"
+                Icon="@Icons.Filled.ArrowCircleUp"
+                title="Go to top"/>
+    </MudScrollToTop>
+}

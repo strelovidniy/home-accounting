@@ -19,5 +19,7 @@ public class User : Entity, IEntity
 
     public Guid? VerificationCode { get; set; }
 
-    public string? PasswordHash { get; set; }
+    public string PasswordHash { get; set; } = null!;
+
+    public string? ImageDataUrl { get; set; }
 }

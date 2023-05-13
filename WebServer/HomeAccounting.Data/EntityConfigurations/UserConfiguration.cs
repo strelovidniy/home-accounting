@@ -18,6 +18,9 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
         entity
             .ToTable(TableName.Users, TableSchema.Dbo);
 
+        entity.HasIndex(e => e.Email)
+            .IsUnique();
+
         entity
             .Property(e => e.Id)
             .HasDefaultValueSql(DefaultSqlValue.NewGuid)
@@ -33,30 +36,46 @@ internal class UserConfiguration : IEntityTypeConfiguration<User>
             .IsRequired(false);
 
         entity
+            .Property(e => e.InvitationToken)
+            .IsRequired(false);
+
+        entity
+            .Property(e => e.VerificationCode)
+            .IsRequired(false);
+
+        entity
             .Property(e => e.FirstName)
             .HasMaxLength(255)
-            .IsRequired(false);
+            .IsRequired();
 
         entity
             .Property(e => e.LastName)
             .HasMaxLength(255)
-            .IsRequired(false);
+            .IsRequired();
 
         entity
             .Property(e => e.Email)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired();
 
         entity
             .Ignore(e => e.FullName);
 
         entity
             .Property(e => e.PasswordHash)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired();
+
+        entity
+            .Property(e => e.ImageDataUrl)
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         entity
             .Property(user => user.Status)
             .HasConversion<string>()
             .HasMaxLength(50)
-            .HasDefaultValue(UserStatus.Pending);
+            .HasDefaultValue(UserStatus.Pending)
+            .IsRequired();
     }
 }

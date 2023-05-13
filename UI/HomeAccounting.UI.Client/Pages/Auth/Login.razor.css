@@ -1,0 +1,32 @@
+.mud-button-filled.mud-button-filled-error {
+    color: var(--mud-palette-error-text);
+    background-color: var(--mud-palette-error);
+}
+
+.mud-button-label {
+    width: 100%;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+}
+
+{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    border-style: solid;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.background-container {
+    background-image: url(images/solar-cover-b-7.jpg);
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+}
+
+.logo {
+    width: 230px;
+}
