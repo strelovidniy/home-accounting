@@ -1,13 +1,28 @@
 using HomeAccounting.Server.DependencyInjection;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+try
+{
+    var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+    Log.Logger = new LoggerConfiguration()
+        .ReadFrom
+        .Configuration(builder.Configuration)
+        .CreateLogger();
 
-builder.Services.RegisterApplication(builder.Configuration);
+    builder.Services.RegisterApplication(builder.Configuration);
 
-var app = builder.Build();
+    var app = builder.Build();
 
-app.UseApplication();
+    app.UseApplication();
 
-app.Run();
+    app.Run();
+}
+catch (Exception exception)
+{
+    Log.Logger.Error(exception, "Stopped program because of exception");
+}
+finally
+{
+    await Log.CloseAndFlushAsync();
+}

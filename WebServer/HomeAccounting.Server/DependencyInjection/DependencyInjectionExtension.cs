@@ -19,6 +19,7 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Serilog;
 
 namespace HomeAccounting.Server.DependencyInjection;
 
@@ -30,6 +31,7 @@ public static class DependencyInjectionExtension
         this IServiceCollection services,
         IConfiguration configuration
     ) => services
+        .RegisterLogging()
         .AddMvc()
         .Services
         .RegisterDataLayer(configuration)
@@ -45,6 +47,14 @@ public static class DependencyInjectionExtension
         .RegisterControllers(configuration)
         .RegisterAuth(configuration)
         .RegisterSwagger();
+
+    private static IServiceCollection RegisterLogging(this IServiceCollection services) =>
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+            loggingBuilder.AddSerilog(Log.Logger);
+        });
 
     private static IServiceCollection RegisterCors(
         this IServiceCollection services,
