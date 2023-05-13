@@ -6,5 +6,5 @@ public class AuthToken
 
     public string? ExpireAt { get; set; }
 
-    public string? RefreshToken { get; set; }
+    public Guid? RefreshToken { get; set; }
 }

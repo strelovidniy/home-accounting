@@ -16,6 +16,9 @@ public partial class MainLayout : IDisposable
     private bool _settingsExpanded = true;
     private bool _adminExpanded = true;
 
+    private bool _isDarkMode;
+    private MudThemeProvider _mudThemeProvider = null!;
+
     [Inject]
     private ISnackbar Snackbar { get; set; } = null!;
 
@@ -110,6 +113,24 @@ public partial class MainLayout : IDisposable
 
     private void GetPermissions()
     {
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
+            StateHasChanged();
+        }
+    }
+
+    private Task OnSystemPreferenceChangedAsync(bool newValue)
+    {
+        _isDarkMode = newValue;
+        StateHasChanged();
+
+        return Task.CompletedTask;
     }
 
 

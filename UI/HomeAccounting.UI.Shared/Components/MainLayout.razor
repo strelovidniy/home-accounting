@@ -3,7 +3,7 @@
 
 @inherits LayoutComponentBase;
 
-<MudThemeProvider/>
+<MudThemeProvider @ref="@_mudThemeProvider" @bind-IsDarkMode="@_isDarkMode" />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -85,8 +85,7 @@ else
     </MudAppBar>
 
     <MudDrawer @bind-Open="@_drawerOpen"
-               Elevation="0"
-               Class="bg-light border-right">
+               Elevation="0">
         <MudDrawerHeader>
             <div class="d-flex flex-row align-items-center justify-content-center w-100">
                 <div class="drawer-logo">
@@ -98,7 +97,7 @@ else
             </div>
         </MudDrawerHeader>
 
-        <MudNavMenu Style="color: black !important">
+        <MudNavMenu>
             <MudNavLink Href="/"
                         Match="NavLinkMatch.All"
                         Icon="@Icons.Filled.Dashboard">
@@ -241,10 +240,10 @@ else
         <MudAppBar Elevation="0"
                    Fixed="false"
                    Dense="true"
-                   Class="ml-0 w-100 bg-light"
+                   Class="ml-0 w-100"
                    Bottom="true"
                    Style="bottom: 0; position: fixed;">
-            <MudText Color="@Color.Dark">
+            <MudText>
                 Copyright © 2023
                 <MudLink Href="#"
                          Underline="@Underline.Always">

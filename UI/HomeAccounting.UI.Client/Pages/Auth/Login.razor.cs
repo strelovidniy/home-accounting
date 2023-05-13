@@ -19,6 +19,8 @@ public partial class Login
         DisableBackdropClick = true
     };
 
+    private bool _processing;
+
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
@@ -37,6 +39,8 @@ public partial class Login
 
     [Inject]
     private ILocalStorageService LocalStorageService { get; set; } = null!;
+
+    private void GoToSignUp() => NavigationManager.NavigateTo("auth/sign-up");
 
     private void TogglePasswordVisibility()
     {
@@ -70,6 +74,8 @@ public partial class Login
     {
         try
         {
+            _processing = true;
+
             var res = await AuthService.LoginAsync(new LoginModel
             {
                 Password = _model.Password,
@@ -86,10 +92,13 @@ public partial class Login
 
             NavigationManager.NavigateTo(
                 !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl : "/", true);
+
+            _processing = false;
         }
-        catch (Exception ex)
+        catch
         {
             await LocalStorageService.RemoveItemAsync("token");
+            _processing = false;
         }
     }
 }

@@ -7,98 +7,132 @@
     Login
 </PageTitle>
 
+<iframe src="/anim-bg.html" 
+        style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;" 
+        frameborder="0"></iframe>
+
 <div class="background-container">
 
-<MudGrid Class="mx-auto text-center position-absolute"
-         Style="background-color: rgba(255,255,255,1);
-            border-radius: 10px;
-            box-shadow: 0px 0px 30px 0px rgb(0 0 0 / 50%);
-            left:50%;
-            max-width: 450px;
-            padding: 4rem 4rem 6rem;
-            top:50%;
-            transform: translate(-50%,-50%);">
+    <MudGrid Class="mx-auto text-center position-absolute"
+             Style="background-color: var(--mud-palette-surface);
+                    border-radius: 10px;
+                    box-shadow: 0px 0px 30px 0px rgb(0 0 0 / 50%);
+                    left:50%;
+                    max-width: 450px;
+                    padding: 4rem 4rem 6rem;
+                    top:50%;
+                    transform: translate(-50%,-50%);">
 
-    <MudItem xs="12">
-        <Logo Class="d-block mx-auto mb-3 logo"/>
-    </MudItem>
+        <MudItem xs="12">
+            <Logo Class="d-block mx-auto mb-3 logo"/>
+        </MudItem>
 
-    <MudItem xs="12">
+        <MudItem xs="12">
 
-        <MudForm @onsubmit="OnSubmitAsync">
+            <MudForm @onsubmit="OnSubmitAsync">
 
-            <MudGrid>
+                <MudGrid>
 
-                <MudItem xs="12">
-                    <div class="d-flex justify-center">
-                        <MudText>
-                            Login with your registered Email Address and Password
-                        </MudText>
-                    </div>
-                </MudItem>
+                    <MudItem xs="12">
+                        <div class="d-flex justify-center">
+                            <MudText>
+                                Login with your registered Email Address and Password
+                            </MudText>
+                        </div>
+                    </MudItem>
 
-                <MudItem xs="12">
-                    <MudTextField T="string" 
-                                  Label="Email" 
-                                  Variant="Variant.Outlined"
-                                  id="email"
+                    <MudItem xs="12">
+                        <MudTextField T="string" 
+                                      Label="Email" 
+                                      Variant="Variant.Outlined"
+                                      id="email"
                                       Name="email"
-                                  @bind-Value="@_model.Email"
-                                  For="@(() => _model.Email)"
-                                  Required="true"
-                                  />
+                                      @bind-Value="@_model.Email"
+                                      For="@(() => _model.Email)"
+                                      Required="true"
+                        />
 
-                </MudItem>
+                    </MudItem>
 
-                <MudItem xs="12">
-                    <MudTextField Label="Password" 
-                                  Variant="Variant.Outlined"
-                                  @bind-Value="_model.Password" 
-                                  For="@(() => _model.Password)"
-                                  Name="password"
-                                  InputType="@_passwordInput" 
-                                  Adornment="Adornment.End" 
-                                  AdornmentIcon="@_passwordInputIcon" 
-                                  OnAdornmentClick="TogglePasswordVisibility" 
-                                  Required="true"
-                                   />
-                </MudItem>
+                    <MudItem xs="12">
+                        <MudTextField Label="Password" 
+                                      Variant="Variant.Outlined"
+                                      @bind-Value="_model.Password" 
+                                      For="@(() => _model.Password)"
+                                      Name="password"
+                                      InputType="@_passwordInput" 
+                                      Adornment="Adornment.End" 
+                                      AdornmentIcon="@_passwordInputIcon" 
+                                      OnAdornmentClick="TogglePasswordVisibility" 
+                                      Required="true"
+                        />
+                    </MudItem>
 
-                <MudItem Class="d-flex justify-center" 
-                         xs="12">
-                    <MudButton ButtonType="ButtonType.Submit"
-                               Variant="Variant.Filled"
-                               Color="Color.Primary"
-                               Size="Size.Large"
-                               class="w-100"
-                               Style="background: ">
-                        Sign In
-                    </MudButton>
-                </MudItem>
+                    <MudItem Class="d-flex justify-center" 
+                             xs="9">
+                        <MudButton ButtonType="ButtonType.Submit"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Size="Size.Large"
+                                   Disabled="@_processing"
+                                   class="w-100">
+                            @if (_processing)
+                            {
+                                <MudProgressCircular Class="ms-n1" 
+                                                     Size="Size.Small" 
+                                                     Indeterminate="true"/>
+                                <MudText Class="ms-2">
+                                    Signing In
+                                </MudText>
+                            }
+                            else
+                            {
+                                <MudText>
+                                    Sign In
+                                </MudText>
+                            }
+                        </MudButton>
+                    </MudItem>
+                    
+                    <MudItem Class="d-flex justify-center"
+                             xs="1">
 
-                <MudItem Class="d-flex justify-center align-center flex-column"
-                         xs="12">
-                    <MudLink Underline="Underline.None"
-                             OnClick="ResetPasswordAsync">
-                        Forgot Password?
-                    </MudLink>
-                </MudItem>
+                    </MudItem>
+                    <MudItem Class="d-flex justify-center"
+                             xs="2">
+                        <MudIconButton ButtonType="ButtonType.Button"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Size="Size.Large"
+                                   Icon="@Icons.Material.Filled.HowToReg"
+                                   class="w-100"
+                                   OnClick="@GoToSignUp">
+                        </MudIconButton>
+                    </MudItem>
 
-                <MudItem Class="d-flex justify-center align-center flex-column"
-                         xs="12">
-                    <MudText>
-                        Any troubles? Email us.
-                    </MudText>
+                    <MudItem Class="d-flex justify-center align-center flex-column"
+                             xs="12">
+                        <MudLink Underline="Underline.None"
+                                 OnClick="ResetPasswordAsync">
+                            Forgot Password?
+                        </MudLink>
+                    </MudItem>
 
-                    <MudLink Href="mailto:helpdesk@home-accounting.com"
-                             Underline="Underline.Always">
-                        helpdesk@poweredprojects.com.au
-                    </MudLink>
-                </MudItem>
-            </MudGrid>
-        </MudForm>
+                    <MudItem Class="d-flex justify-center align-center flex-column"
+                             xs="12">
+                        <MudText>
+                            Any troubles? Email us.
+                        </MudText>
+
+                        <MudLink Href="mailto:helpdesk@home-accounting.com"
+                                 Underline="Underline.Always">
+                            helpdesk@home-accounting.com
+                        </MudLink>
+                    </MudItem>
+                </MudGrid>
+            </MudForm>
         
-    </MudItem>
+        </MudItem>
 
-</MudGrid>
+    </MudGrid>
 </div>

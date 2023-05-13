@@ -29,7 +29,9 @@ public static class DomainDependencyInjectionExtension
         .AddHttpContextAccessor()
         .AddTransient<IEmailService, EmailService>()
         .AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>()
-        .AddTransient<IValidationService, ValidationService>();
+        .AddTransient<IValidationService, ValidationService>()
+        .AddTransient<IUserService, UserService>()
+        .AddTransient<IAuthService, AuthService>();
 
     private static IServiceCollection AddValidators(
         this IServiceCollection services

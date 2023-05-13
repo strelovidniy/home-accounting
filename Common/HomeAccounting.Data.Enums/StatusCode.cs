@@ -11,7 +11,7 @@ public enum StatusCode
     GroupNotFound = 103,
     RankingNotFound = 104,
     LinnworksOrderDetailsNotFound = 105,
-    VendorNotFound = 106,
+    AccountNotFound = 106,
     UserNotFound = 107,
     RoleNotFound = 108,
     CompanyNotFound = 109,

@@ -18,11 +18,9 @@ public partial class SignUp : IDisposable
 
     private bool _isSuccessSubmit = true;
 
-    private MudForm _form = null!;
+    private bool _processing;
 
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "vc")]
-    public Guid InvitationToken { get; set; }
+    private MudForm _form = null!;
 
     [Inject]
     private IUserService UserService { get; set; } = null!;
@@ -106,6 +104,22 @@ public partial class SignUp : IDisposable
             : "Password must have at least one uppercase letter";
     }
 
+    private static string? ValidateEmailField(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return "Email is required";
+        }
+
+        return Regex.IsMatch(
+            value,
+            @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z",
+            RegexOptions.IgnoreCase
+        )
+            ? null
+            : "Email format is not valid";
+    }
+
     private string? ValidateConfirmPassword(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -127,13 +141,15 @@ public partial class SignUp : IDisposable
                 return;
             }
 
+            _processing = true;
+
             await UserService.CreateUserAsync(new CreateUserModel
             {
                 Password = _model.Password,
                 ConfirmPassword = _model.ConfirmPassword,
                 FirstName = _model.FirstName,
                 LastName = _model.LastName,
-                InvitationToken = InvitationToken
+                Email = _model.Email
             });
 
             if (_isSuccessSubmit)
@@ -144,10 +160,12 @@ public partial class SignUp : IDisposable
             {
                 _isSuccessSubmit = true;
             }
+
+            _processing = false;
         }
         catch
         {
-            // ignored
+            _processing = false;
         }
     }
 

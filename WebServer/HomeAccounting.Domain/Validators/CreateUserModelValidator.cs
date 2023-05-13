@@ -10,12 +10,14 @@ internal class CreateUserModelValidator : AbstractValidator<CreateUserModel>
 {
     public CreateUserModelValidator(IValidationService validationService)
     {
-        RuleFor(createUserModel => createUserModel.InvitationToken)
+        RuleFor(createUserModel => createUserModel.Email)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithStatusCode(StatusCode.InvitationTokenRequired)
-            .MustAsync(validationService.IsInvitedUserExistAsync)
-            .WithStatusCode(StatusCode.UserNotFound);
+            .WithStatusCode(StatusCode.EmailRequired)
+            .EmailAddress()
+            .WithStatusCode(StatusCode.InvalidEmailFormat)
+            .MustAsync(validationService.IsEmailUniqueAsync)
+            .WithStatusCode(StatusCode.EmailAlreadyExists);
 
         RuleFor(createUserModel => createUserModel.Password)
             .Cascade(CascadeMode.Stop)
