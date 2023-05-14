@@ -40,9 +40,6 @@ public partial class MainLayout : IDisposable
 
     public bool IsAuth => NavManager.Uri.Contains("/auth/");
 
-    [Inject]
-    private ISyncLocalStorageService SyncLocalStorageService { get; set; }
-
     public void Dispose()
     {
         Dispose(true);
@@ -67,7 +64,7 @@ public partial class MainLayout : IDisposable
 
     public void OnUnauthorized(HttpResponseMessage response)
     {
-        NavManager.NavigateTo("auth/login");
+        LogoutAsync().AndForget();
     }
 
     public void OnBadRequest(HttpResponseMessage response)
@@ -139,9 +136,9 @@ public partial class MainLayout : IDisposable
     }
 
 
-    private void Logout()
+    private async Task LogoutAsync()
     {
-        LocalStorageService.RemoveItemAsync("token");
+        await LocalStorageService.RemoveItemAsync("token");
         NavManager.NavigateTo("auth/login");
     }
 
