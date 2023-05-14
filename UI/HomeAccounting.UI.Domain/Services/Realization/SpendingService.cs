@@ -52,4 +52,12 @@ internal class SpendingService : ISpendingService
             $"api/v1/spendings?userId={userId}&spendingId={spendingId}",
             cancellationToken
         );
+
+    public Task<decimal> GetAverageSpendingAsync(
+        CancellationToken cancellationToken = default
+    ) => _httpClient
+        .GetAsync<decimal>(
+            "api/v1/spendings/average",
+            cancellationToken
+        );
 }

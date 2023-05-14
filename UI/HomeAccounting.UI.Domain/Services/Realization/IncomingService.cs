@@ -52,4 +52,12 @@ internal class IncomingService : IIncomingService
             $"api/v1/incomings?userId={userId}&incomingId={incomingId}",
             cancellationToken
         );
+
+    public Task<decimal> GetAverageIncomingAsync(
+        CancellationToken cancellationToken = default
+    ) => _httpClient
+        .GetAsync<decimal>(
+            "api/v1/incomings/average",
+            cancellationToken
+        );
 }

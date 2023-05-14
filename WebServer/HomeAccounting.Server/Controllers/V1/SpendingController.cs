@@ -30,6 +30,17 @@ public class SpendingController : BaseController
             )
     );
 
+    [HttpGet("average")]
+    public async Task<IActionResult> GetAverageSpendingAsync(
+        CancellationToken cancellationToken
+    ) => Ok(
+        await _spendingService
+            .GetAverageSpendingAsync(
+                CurrentUserId,
+                cancellationToken
+            )
+    );
+
     [HttpPost]
     public async Task<IActionResult> CreateSpendingAsync(
         [FromBody] CreateSpendingModel createSpendingModel,

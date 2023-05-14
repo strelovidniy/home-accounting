@@ -7,8 +7,10 @@ using MudBlazor;
 
 namespace HomeAccounting.UI.Client.Pages.Auth;
 
-public partial class Login
+public partial class Login : IDisposable
 {
+    private readonly CancellationTokenSource _cts = new();
+
     private readonly LoginModel _model = new();
 
     private readonly DialogOptions _dialogOptions = new()
@@ -25,6 +27,8 @@ public partial class Login
     private InputType _passwordInput = InputType.Password;
     private string _passwordInputIcon = Icons.Material.Filled.VisibilityOff;
 
+    private MudForm _form = null!;
+
     [Inject]
     private IDialogService DialogService { get; set; } = null!;
 
@@ -39,6 +43,12 @@ public partial class Login
 
     [Inject]
     private ILocalStorageService LocalStorageService { get; set; } = null!;
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
 
     private void GoToSignUp() => NavigationManager.NavigateTo("auth/sign-up");
 
@@ -76,11 +86,25 @@ public partial class Login
         {
             _processing = true;
 
-            var res = await AuthService.LoginAsync(new LoginModel
+            await _form.Validate();
+
+            if (!_form.IsValid)
             {
-                Password = _model.Password,
-                Email = _model.Email
-            });
+                Snackbar.Add(_form.Errors.FirstOrDefault(), Severity.Error);
+
+                _processing = false;
+
+                return;
+            }
+
+            var res = await AuthService.LoginAsync(
+                new LoginModel
+                {
+                    Password = _model.Password,
+                    Email = _model.Email
+                },
+                _cts.Token
+            );
 
             await LocalStorageService.SetItemAsync("token", res.Token);
 
@@ -100,5 +124,30 @@ public partial class Login
             await LocalStorageService.RemoveItemAsync("token");
             _processing = false;
         }
+    }
+
+    private void ReleaseUnmanagedResources()
+    {
+        // TODO release unmanaged resources here
+    }
+
+    private void Dispose(bool disposing)
+    {
+        ReleaseUnmanagedResources();
+
+        if (!disposing)
+        {
+            return;
+        }
+
+        _cts.Cancel();
+        _cts.Dispose();
+        _form.Dispose();
+        Snackbar.Dispose();
+    }
+
+    ~Login()
+    {
+        Dispose(false);
     }
 }

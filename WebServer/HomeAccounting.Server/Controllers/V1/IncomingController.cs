@@ -30,6 +30,17 @@ public class IncomingController : BaseController
             )
     );
 
+    [HttpGet("average")]
+    public async Task<IActionResult> GetAverageSpendingAsync(
+        CancellationToken cancellationToken
+    ) => Ok(
+        await _incomingService
+            .GetAverageIncomingAsync(
+                CurrentUserId,
+                cancellationToken
+            )
+    );
+
     [HttpPost]
     public async Task<IActionResult> CreateIncomingAsync(
         [FromBody] CreateIncomingModel createIncomingModel,

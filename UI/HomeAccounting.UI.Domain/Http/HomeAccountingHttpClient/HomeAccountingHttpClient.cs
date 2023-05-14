@@ -4,7 +4,6 @@ using HomeAccounting.Models;
 using HomeAccounting.UI.Domain.Http.HttpClientFactory;
 using HomeAccounting.UI.Domain.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OData.QueryBuilder.Conventions.AddressingEntities.Query;
 
 namespace HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
@@ -586,16 +585,52 @@ internal class HomeAccountingHttpClient : IHomeAccountingHttpClient
 
             var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            var jObject = JObject.Parse(stringResult);
+            return JsonConvert.DeserializeObject<ODataResponse<T>>(stringResult) ?? default;
+        }
+        catch
+        {
+            return default;
+        }
+    }
 
-            var value = jObject["value"];
-            var context = jObject["@odata.context"];
-            var count = jObject["@odata.count"];
+    public async Task<ODataResponse<T>?> GetFromOdataAsync<T>(
+        IODataQuery query,
+        CancellationToken cancellationToken = default
+    )
+    {
+        HttpResponseMessage response;
 
-            return value != null
-                ? new ODataResponse<T>(context?.ToString() ?? string.Empty, value.ToObject<List<T>>(),
-                    count?.ToObject<int>() ?? 0)
-                : default;
+        var requestUri = query.ToUri(UriKind.Relative).ToString();
+
+        try
+        {
+            var httpClient = await _httpClientFactory
+                .GetInstanceAsync(
+                    cancellationToken
+                );
+
+            response = await httpClient
+                .GetAsync(
+                    requestUri,
+                    cancellationToken
+                );
+
+            await ObserveHttpResponseAsync(response);
+        }
+        catch (Exception ex)
+        {
+            OnError.Invoke(ex);
+
+            return default;
+        }
+
+        try
+        {
+            response.EnsureSuccessStatusCode();
+
+            var stringResult = await response.Content.ReadAsStringAsync(cancellationToken);
+
+            return JsonConvert.DeserializeObject<ODataResponse<T>>(stringResult) ?? default;
         }
         catch
         {

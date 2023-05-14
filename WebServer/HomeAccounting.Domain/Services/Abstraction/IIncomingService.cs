@@ -26,4 +26,9 @@ public interface IIncomingService
         Guid incomingId,
         CancellationToken cancellationToken = default
     );
+
+    public Task<decimal> GetAverageIncomingAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default
+    );
 }

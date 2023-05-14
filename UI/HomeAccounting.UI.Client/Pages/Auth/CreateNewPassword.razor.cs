@@ -7,9 +7,13 @@ using MudBlazor;
 
 namespace HomeAccounting.UI.Client.Pages.Auth;
 
-public partial class CreateNewPassword
+public partial class CreateNewPassword : IDisposable
 {
     private readonly SetNewPasswordModel _model = new();
+
+    private readonly CancellationTokenSource _cts = new();
+
+    private bool _processing;
 
     private bool _passwordVisibility;
     private InputType _passwordInput = InputType.Password;
@@ -37,10 +41,24 @@ public partial class CreateNewPassword
 
     public void Dispose()
     {
-        ReleaseUnmanagedResources();
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
+    private void Dispose(bool disposing)
+    {
+        ReleaseUnmanagedResources();
+
+        if (!disposing)
+        {
+            return;
+        }
+
+        _cts.Cancel();
+        _cts.Dispose();
+        _form.Dispose();
+        Snackbar.Dispose();
+    }
 
     private void OnValidationError(ApiErrorResult? _)
     {
@@ -119,19 +137,28 @@ public partial class CreateNewPassword
     {
         try
         {
+            _processing = true;
+
+            await _form.Validate();
+
             if (!_form.IsValid)
             {
                 Snackbar.Add(_form.Errors.FirstOrDefault(), Severity.Error);
 
+                _processing = false;
+
                 return;
             }
 
-            await UserService.SetNewPasswordAsync(new SetNewPasswordModel
-            {
-                NewPassword = _model.NewPassword,
-                ConfirmNewPassword = _model.ConfirmNewPassword,
-                VerificationCode = VerificationCode
-            });
+            await UserService.SetNewPasswordAsync(
+                new SetNewPasswordModel
+                {
+                    NewPassword = _model.NewPassword,
+                    ConfirmNewPassword = _model.ConfirmNewPassword,
+                    VerificationCode = VerificationCode
+                },
+                _cts.Token
+            );
 
             if (_isSuccessSubmit)
             {
@@ -141,10 +168,12 @@ public partial class CreateNewPassword
             {
                 _isSuccessSubmit = true;
             }
+
+            _processing = false;
         }
         catch
         {
-            // ignored
+            _processing = false;
         }
     }
 

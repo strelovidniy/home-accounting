@@ -25,6 +25,11 @@ public interface IHomeAccountingHttpClient
         CancellationToken cancellationToken = default
     );
 
+    public Task<ODataResponse<T>?> GetFromOdataAsync<T>(
+        IODataQuery query,
+        CancellationToken cancellationToken = default
+    );
+
     public Task GetAsync(
         string requestUri,
         CancellationToken cancellationToken = default

@@ -26,4 +26,9 @@ public interface ISpendingService
         Guid spendingId,
         CancellationToken cancellationToken = default
     );
+
+    public Task<decimal> GetAverageSpendingAsync(
+        Guid userId,
+        CancellationToken cancellationToken = default
+    );
 }

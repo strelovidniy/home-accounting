@@ -57,7 +57,12 @@ else
                 {
                     <MudAvatar Color="Color.Success"
                                Rounded="true"
-                               Style="background-color: #FFD580 !important; color: black !important; font-size: 15px !important; height: 40px !important; width: 160px !important;">
+                               Style="background-color: #FFD580 !important; 
+                                      color: black !important; 
+                                      font-size: 15px !important;
+                                      height: 40px !important;
+                                      width: fit-content;
+                                      padding: 0 15px">
                         <strong>
                             @_fullName
                         </strong>
@@ -234,9 +239,13 @@ else
     </MudDrawer>
 
     <MudMainContent Class="h-100">
+        
+        <AnimatedBackground/>
 
         <MudContainer MaxWidth="MaxWidth.False"
-                      Style="min-height: calc(100% - calc(var(--mud-appbar-min-height) - 16px)); padding-bottom: 72px; padding-top: 24px;"
+                      Style="min-height: calc(100% - calc(var(--mud-appbar-min-height) - 16px)); 
+                             padding-bottom: 72px;
+                             padding-top: 24px;"
                       Class="position-relative">
             @Body
         </MudContainer>

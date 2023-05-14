@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using HomeAccounting.Data.DependencyInjection;
-using HomeAccounting.Data.Entities;
 using HomeAccounting.Domain.DependencyInjection;
 using HomeAccounting.Domain.Extensions;
 using HomeAccounting.Domain.Helpers;
@@ -11,10 +10,7 @@ using HomeAccounting.Server.Constants;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.OData.Edm;
-using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -177,11 +173,6 @@ public static class DependencyInjectionExtension
                 );
             })
             .AddCustomBadRequest()
-            .AddOData(options =>
-            {
-                options.AddRouteComponents("api/odata", GetEdmModel());
-                options.EnableQueryFeatures(500);
-            })
             .AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -255,16 +246,5 @@ public static class DependencyInjectionExtension
         app.MapFallbackToFile("index.html");
 
         return app;
-    }
-
-    private static IEdmModel GetEdmModel()
-    {
-        var builder = new ODataConventionModelBuilder();
-
-        builder.EntitySet<User>("users").EntityType.HasKey(e => e.Id);
-        builder.EntitySet<Incoming>("incoming").EntityType.HasKey(e => e.Id);
-        builder.EntitySet<Spending>("spending").EntityType.HasKey(e => e.Id);
-
-        return builder.GetEdmModel();
     }
 }

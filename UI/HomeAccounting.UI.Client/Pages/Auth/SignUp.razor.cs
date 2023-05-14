@@ -10,6 +10,8 @@ namespace HomeAccounting.UI.Client.Pages.Auth;
 
 public partial class SignUp : IDisposable
 {
+    private readonly CancellationTokenSource _cts = new();
+
     private readonly CreateUserModel _model = new();
 
     private bool _passwordVisibility;
@@ -36,8 +38,23 @@ public partial class SignUp : IDisposable
 
     public void Dispose()
     {
-        ReleaseUnmanagedResources();
+        Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool disposing)
+    {
+        ReleaseUnmanagedResources();
+
+        if (!disposing)
+        {
+            return;
+        }
+
+        _cts.Cancel();
+        _cts.Dispose();
+        _form.Dispose();
+        Snackbar.Dispose();
     }
 
 
@@ -134,23 +151,30 @@ public partial class SignUp : IDisposable
     {
         try
         {
+            _processing = true;
+
+            await _form.Validate();
+
             if (!_form.IsValid)
             {
                 Snackbar.Add(_form.Errors.FirstOrDefault(), Severity.Error);
 
+                _processing = false;
+
                 return;
             }
 
-            _processing = true;
-
-            await UserService.CreateUserAsync(new CreateUserModel
-            {
-                Password = _model.Password,
-                ConfirmPassword = _model.ConfirmPassword,
-                FirstName = _model.FirstName,
-                LastName = _model.LastName,
-                Email = _model.Email
-            });
+            await UserService.CreateUserAsync(
+                new CreateUserModel
+                {
+                    Password = _model.Password,
+                    ConfirmPassword = _model.ConfirmPassword,
+                    FirstName = _model.FirstName,
+                    LastName = _model.LastName,
+                    Email = _model.Email
+                },
+                _cts.Token
+            );
 
             if (_isSuccessSubmit)
             {
@@ -177,6 +201,6 @@ public partial class SignUp : IDisposable
 
     ~SignUp()
     {
-        ReleaseUnmanagedResources();
+        Dispose(false);
     }
 }
