@@ -7,8 +7,11 @@
                   @bind-IsDarkMode="@_isDarkMode" />
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-
-@if (IsAuth)
+@if (!_inited)
+{
+    <AnimatedBackground/>
+}
+else if (_isAuth)
 {
     <MudLayout>
         @Body
@@ -56,7 +59,7 @@ else
                                Rounded="true"
                                Style="background-color: #FFD580 !important; color: black !important; font-size: 15px !important; height: 40px !important; width: 160px !important;">
                         <strong>
-                            @FullName
+                            @_fullName
                         </strong>
                     </MudAvatar>
                 }

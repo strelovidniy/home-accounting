@@ -19,6 +19,14 @@ public partial class MainLayout : IDisposable
     private bool _isDarkMode;
     private MudThemeProvider _mudThemeProvider = null!;
 
+    private bool _inited;
+
+    private char? _firstLetterOfName;
+
+    private string _fullName;
+
+    private bool _isAuth;
+
     [Inject]
     private ISnackbar Snackbar { get; set; } = null!;
 
@@ -33,12 +41,6 @@ public partial class MainLayout : IDisposable
 
     [Inject]
     private ILocalStorageService LocalStorageService { get; set; } = null!;
-
-    private char? FirstLetterOfName { get; set; }
-
-    private string FullName { get; set; }
-
-    public bool IsAuth => NavManager.Uri.Contains("/auth/");
 
     public void Dispose()
     {
@@ -57,46 +59,66 @@ public partial class MainLayout : IDisposable
         HttpClient.OnError += OnError;
     }
 
-    public void OnForbidden(HttpResponseMessage response)
+    private void OnForbidden(HttpResponseMessage response)
     {
         //NavManager.NavigateTo($"auth/login?returnUrl={Uri.EscapeDataString(NavManager.Uri)}");
     }
 
-    public void OnUnauthorized(HttpResponseMessage response)
+    private void OnUnauthorized(HttpResponseMessage response)
     {
         LogoutAsync().AndForget();
     }
 
-    public void OnBadRequest(HttpResponseMessage response)
+    private void OnBadRequest(HttpResponseMessage response)
     {
         //NavManager.NavigateTo($"auth/login?returnUrl={Uri.EscapeDataString(NavManager.Uri)}");
     }
 
-    public void OnNotFound(HttpResponseMessage response)
+    private void OnNotFound(HttpResponseMessage response)
     {
         //NavManager.NavigateTo($"auth/login?returnUrl={Uri.EscapeDataString(NavManager.Uri)}");
     }
 
-    public void OnValidationError(ApiErrorResult? error)
+    private void OnValidationError(ApiErrorResult? error)
     {
         Snackbar.Add(error?.Message, Severity.Error);
     }
 
-    public void OnInternalServerError(ApiErrorResult? error)
+    private void OnInternalServerError(ApiErrorResult? error)
     {
         Snackbar.Add(error?.Message, Severity.Error);
     }
 
-    public void OnError(Exception ex)
+    private void OnError(Exception ex)
     {
         Snackbar.Add(ex.Message, Severity.Error);
     }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         Init();
 
-        return Task.CompletedTask;
+        _isAuth = NavManager.Uri.Contains("/auth/");
+
+        if (_isAuth)
+        {
+            _inited = true;
+
+            return;
+        }
+
+        _currentUser = await AuthService.GetCurrentUserAsync();
+
+        if (_currentUser?.FirstName.Length > 0)
+        {
+            _firstLetterOfName = _currentUser.FirstName[0];
+        }
+
+        _fullName = $@"{_currentUser?.FirstName} {_currentUser?.LastName}";
+
+        GetPermissions();
+
+        _inited = true;
     }
 
     private void GetPermissions()
@@ -110,17 +132,6 @@ public partial class MainLayout : IDisposable
             _isDarkMode = await _mudThemeProvider.GetSystemPreference();
             await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
             await InvokeAsync(StateHasChanged);
-
-            _currentUser = await AuthService.GetCurrentUserAsync();
-
-            if (_currentUser?.FirstName.Length > 0)
-            {
-                FirstLetterOfName = _currentUser.FirstName[0];
-            }
-
-            FullName = $@"{_currentUser?.FirstName} {_currentUser?.LastName}";
-
-            GetPermissions();
         }
     }
 
