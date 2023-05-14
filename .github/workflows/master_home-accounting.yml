@@ -21,7 +21,7 @@ jobs:
         with:
           tokenPrefix: '#{'
           tokenSuffix: '}#'
-          files: '["appsettings.json"]'
+          files: '["./WebServer/HomeAccounting.Server/appsettings.json"]'
         env:
           ConnectionString: ${{secrets.CONNECTION_STRING}}
           AccessTokenString: ${{secrets.ACCESS_TOKEN_STRING}}
