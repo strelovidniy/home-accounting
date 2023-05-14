@@ -92,30 +92,37 @@ public partial class MainLayout : IDisposable
         Snackbar.Add(ex.Message, Severity.Error);
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         Init();
 
-        _isDarkMode = await _mudThemeProvider.GetSystemPreference();
-        await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
-        await InvokeAsync(StateHasChanged);
-
-        _currentUser = await AuthService.GetCurrentUserAsync();
-
-        if (_currentUser?.FirstName.Length > 0)
-        {
-            FirstLetterOfName = _currentUser.FirstName[0];
-        }
-
-        FullName = $@"{_currentUser?.FirstName} {_currentUser?.LastName}";
-
-        GetPermissions();
+        return Task.CompletedTask;
     }
 
     private void GetPermissions()
     {
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
+            await InvokeAsync(StateHasChanged);
+
+            _currentUser = await AuthService.GetCurrentUserAsync();
+
+            if (_currentUser?.FirstName.Length > 0)
+            {
+                FirstLetterOfName = _currentUser.FirstName[0];
+            }
+
+            FullName = $@"{_currentUser?.FirstName} {_currentUser?.LastName}";
+
+            GetPermissions();
+        }
+    }
 
     private Task OnSystemPreferenceChangedAsync(bool newValue)
     {
