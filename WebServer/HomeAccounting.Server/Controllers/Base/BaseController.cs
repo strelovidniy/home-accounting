@@ -1,6 +1,5 @@
-﻿using System.Security.Claims;
-using FluentValidation;
-using HomeAccounting.Domain.Exceptions;
+﻿using FluentValidation;
+using HomeAccounting.Domain.Extensions;
 using HomeAccounting.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,8 +12,7 @@ public class BaseController : ControllerBase
 {
     private readonly IServiceProvider _services;
 
-    protected Guid CurrentUserId => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
-        ?? throw new ApiException(Data.Enums.StatusCode.Unauthorized));
+    protected Guid CurrentUserId => HttpContext.GetCurrentUserId();
 
     public BaseController(
         IServiceProvider services

@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using AutoMapper;
 using EntityFrameworkCore.RepositoryInfrastructure;
 using HomeAccounting.Data.Entities;
 using HomeAccounting.Data.Enums;
@@ -13,6 +14,7 @@ using HomeAccounting.Domain.Validators.Runtime;
 using HomeAccounting.Models;
 using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
+using HomeAccounting.Models.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,18 +26,21 @@ internal class UserService : IUserService
     private readonly IEmailService _emailService;
     private readonly IUrlSettings _urlSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMapper _mapper;
 
     public UserService(
         IRepository<User> userRepository,
         IEmailService emailService,
         IUrlSettings urlSettings,
-        IHttpContextAccessor httpContextAccessor
+        IHttpContextAccessor httpContextAccessor,
+        IMapper mapper
     )
     {
         _userRepository = userRepository;
         _emailService = emailService;
         _urlSettings = urlSettings;
         _httpContextAccessor = httpContextAccessor;
+        _mapper = mapper;
     }
 
     public async Task ResetPasswordAsync(
@@ -91,27 +96,19 @@ internal class UserService : IUserService
     )
     {
         await _userRepository.AddAsync(
-            new User
-            {
-                Email = createUserModel.Email,
-                FirstName = createUserModel.FirstName,
-                LastName = createUserModel.LastName,
-                PasswordHash = PasswordHasher.GetHash(createUserModel.Password),
-                InvitationToken = null,
-                Status = UserStatus.Active
-            },
+            _mapper.Map<User>(createUserModel),
             cancellationToken
         );
 
         await _userRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public Task<User?> GetUserAsync(
+    public async Task<UserView?> GetUserAsync(
         Guid id,
         CancellationToken cancellationToken = default
-    ) => _userRepository
+    ) => _mapper.Map<UserView>(await _userRepository
         .Query()
-        .FirstOrDefaultAsync(user => user.Id == id, cancellationToken);
+        .FirstOrDefaultAsync(user => user.Id == id, cancellationToken));
 
     public async Task ChangePasswordAsync(
         ChangePasswordModel changePasswordModel,

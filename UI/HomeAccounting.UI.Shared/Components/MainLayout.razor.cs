@@ -1,6 +1,6 @@
 ﻿using Blazored.LocalStorage;
-using HomeAccounting.Data.Entities;
 using HomeAccounting.Models;
+using HomeAccounting.Models.Views;
 using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 using HomeAccounting.UI.Domain.Services.Abstraction;
 using Microsoft.AspNetCore.Components;
@@ -10,7 +10,7 @@ namespace HomeAccounting.UI.Shared.Components;
 
 public partial class MainLayout : IDisposable
 {
-    private User? _currentUser;
+    private UserView? _currentUser;
 
     private bool _drawerOpen = true;
     private bool _settingsExpanded = true;
@@ -23,9 +23,9 @@ public partial class MainLayout : IDisposable
 
     private char? _firstLetterOfName;
 
-    private string _fullName;
+    private string? _fullName;
 
-    private bool _isAuth;
+    private bool _isAuth => NavManager.Uri.Contains("/auth/");
 
     [Inject]
     private ISnackbar Snackbar { get; set; } = null!;
@@ -97,8 +97,6 @@ public partial class MainLayout : IDisposable
     protected override async Task OnInitializedAsync()
     {
         Init();
-
-        _isAuth = NavManager.Uri.Contains("/auth/");
 
         if (_isAuth)
         {

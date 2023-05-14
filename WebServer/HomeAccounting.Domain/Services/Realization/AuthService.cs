@@ -36,7 +36,7 @@ internal class AuthService : IAuthService
         _jwtSettings = jwtSettings;
     }
 
-    public Task<User?> GetCurrentUserAsync(
+    public Task<UserView?> GetCurrentUserAsync(
         CancellationToken cancellationToken = default
     ) => _userService.GetUserAsync(
         _httpContextAccessor.GetCurrentUserId(),

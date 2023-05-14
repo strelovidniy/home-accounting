@@ -24,7 +24,9 @@ public static class UiConnectorDependencyInjectionExtension
         .AddScoped<IHttpClientFactory, HttpClientFactory>()
         .AddScoped<IHomeAccountingHttpClient, HomeAccountingHttpClient>()
         .AddTransient<IUserService, UserService>()
-        .AddTransient<IAuthService, AuthService>();
+        .AddTransient<IAuthService, AuthService>()
+        .AddTransient<ISpendingService, SpendingService>()
+        .AddTransient<IIncomingService, IncomingService>();
 
     private static IServiceCollection AddSettings(
         this IServiceCollection services,

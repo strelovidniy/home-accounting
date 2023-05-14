@@ -10,6 +10,10 @@ internal class HomeAccountingContext : DbContext
 {
     public virtual DbSet<User> Users { get; set; } = null!;
 
+    public virtual DbSet<Spending> Spendings { get; set; } = null!;
+
+    public virtual DbSet<Incoming> Incomings { get; set; } = null!;
+
     public HomeAccountingContext(DbContextOptions<HomeAccountingContext> options)
         : base(options)
     {
@@ -22,6 +26,8 @@ internal class HomeAccountingContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new SpendingConfiguration());
+        modelBuilder.ApplyConfiguration(new IncomingConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

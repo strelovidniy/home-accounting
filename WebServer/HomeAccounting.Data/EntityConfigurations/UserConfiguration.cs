@@ -10,72 +10,91 @@ namespace HomeAccounting.Data.EntityConfigurations;
 
 internal class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<User> entity)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        entity
-            .HasKey(e => e.Id);
+        builder
+            .HasKey(user => user.Id);
 
-        entity
+        builder
             .ToTable(TableName.Users, TableSchema.Dbo);
 
-        entity.HasIndex(e => e.Email)
+        builder.HasIndex(user => user.Email)
             .IsUnique();
 
-        entity
-            .Property(e => e.Id)
+        builder
+            .Property(user => user.Id)
             .HasDefaultValueSql(DefaultSqlValue.NewGuid)
             .IsRequired();
 
-        entity
-            .Property(e => e.CreatedAt)
+        builder
+            .Property(user => user.CreatedAt)
             .HasDefaultValueSql(DefaultSqlValue.NowUtc)
             .IsRequired();
 
-        entity
-            .Property(e => e.UpdatedAt)
+        builder
+            .Property(user => user.UpdatedAt)
             .IsRequired(false);
 
-        entity
-            .Property(e => e.InvitationToken)
+        builder
+            .Property(user => user.InvitationToken)
             .IsRequired(false);
 
-        entity
-            .Property(e => e.VerificationCode)
+        builder
+            .Property(user => user.VerificationCode)
             .IsRequired(false);
 
-        entity
-            .Property(e => e.FirstName)
+        builder
+            .Property(user => user.FirstName)
             .HasMaxLength(255)
             .IsRequired();
 
-        entity
-            .Property(e => e.LastName)
+        builder
+            .Property(user => user.LastName)
             .HasMaxLength(255)
             .IsRequired();
 
-        entity
-            .Property(e => e.Email)
+        builder
+            .Property(user => user.Email)
             .HasMaxLength(255)
             .IsRequired();
 
-        entity
-            .Ignore(e => e.FullName);
+        builder
+            .Ignore(user => user.FullName);
 
-        entity
-            .Property(e => e.PasswordHash)
+        builder
+            .Property(user => user.PasswordHash)
             .HasMaxLength(255)
             .IsRequired();
 
-        entity
-            .Property(e => e.ImageDataUrl)
+        builder
+            .Property(user => user.ImageDataUrl)
             .HasMaxLength(255)
             .IsRequired(false);
 
-        entity
+        builder
+            .Property(user => user.MonobankToken)
+            .HasMaxLength(255)
+            .IsRequired(false);
+
+        builder
             .Property(user => user.Status)
             .HasConversion<string>()
             .HasMaxLength(50)
             .HasDefaultValue(UserStatus.Pending)
             .IsRequired();
+
+        builder
+            .HasMany(user => user.Spendings)
+            .WithOne(spending => spending.User)
+            .HasForeignKey(spending => spending.UserId)
+            .HasPrincipalKey(user => user.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .HasMany(user => user.Incomings)
+            .WithOne(incoming => incoming.User)
+            .HasForeignKey(incoming => incoming.UserId)
+            .HasPrincipalKey(user => user.Id)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

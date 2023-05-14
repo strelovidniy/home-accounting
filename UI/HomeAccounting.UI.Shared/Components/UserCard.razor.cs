@@ -1,4 +1,4 @@
-﻿using HomeAccounting.Data.Entities;
+﻿using HomeAccounting.Models.Views;
 using Microsoft.AspNetCore.Components;
 
 namespace HomeAccounting.UI.Shared.Components;
@@ -17,7 +17,7 @@ public partial class UserCard
     private char FirstLetterOfName { get; set; }
 
     [Parameter]
-    public User? CurrentUser { get; set; }
+    public UserView? CurrentUser { get; set; }
 
     public string? ImageDataUrl { get; set; }
 

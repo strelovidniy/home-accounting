@@ -12,6 +12,10 @@ public interface IValidationService
         CancellationToken cancellationToken = default
     );
 
+    public bool IsUserIsCurrentUser(
+        Guid id
+    );
+
     public Task<bool> IsUserWithVerificationCodeExistsAsync(
         Guid verificationCode,
         CancellationToken cancellationToken = default
@@ -29,6 +33,26 @@ public interface IValidationService
 
     public Task<bool> IsEmailUniqueAsync(
         string email,
+        CancellationToken cancellationToken = default
+    );
+
+    public Task<bool> IsSpendingExistAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    );
+
+    public Task<bool> IsSpendingBelongsToCurrentUserAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    );
+
+    public Task<bool> IsIncomingExistAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    );
+
+    public Task<bool> IsIncomingBelongsToCurrentUserAsync(
+        Guid id,
         CancellationToken cancellationToken = default
     );
 }

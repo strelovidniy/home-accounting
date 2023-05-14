@@ -1,5 +1,4 @@
-﻿using HomeAccounting.Data.Entities;
-using HomeAccounting.Models;
+﻿using HomeAccounting.Models;
 using HomeAccounting.Models.Views;
 using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 using HomeAccounting.UI.Domain.Services.Abstraction;
@@ -24,10 +23,10 @@ internal class AuthService : IAuthService
             cancellationToken
         );
 
-    public Task<User?> GetCurrentUserAsync(
+    public Task<UserView?> GetCurrentUserAsync(
         CancellationToken cancellationToken = default
     ) => _httpClient
-        .GetAsync<User>(
+        .GetAsync<UserView>(
             "api/v1/auth/me",
             cancellationToken
         );

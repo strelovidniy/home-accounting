@@ -26,4 +26,10 @@ public class User : Entity, IEntity
     public string PasswordHash { get; set; } = null!;
 
     public string? ImageDataUrl { get; set; }
+
+    public string? MonobankToken { get; set; }
+
+    public IEnumerable<Spending> Spendings { get; set; } = new List<Spending>();
+
+    public IEnumerable<Incoming> Incomings { get; set; } = new List<Incoming>();
 }

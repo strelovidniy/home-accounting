@@ -30,5 +30,7 @@ public static class DataDependencyInjectionExtension
     ) => services
         .CreateRepositoryBuilderWithContext<HomeAccountingContext>()
         .AddRepository<User>()
+        .AddRepository<Spending>()
+        .AddRepository<Incoming>()
         .Build();
 }

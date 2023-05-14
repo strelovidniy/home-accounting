@@ -262,6 +262,8 @@ public static class DependencyInjectionExtension
         var builder = new ODataConventionModelBuilder();
 
         builder.EntitySet<User>("users").EntityType.HasKey(e => e.Id);
+        builder.EntitySet<Incoming>("incoming").EntityType.HasKey(e => e.Id);
+        builder.EntitySet<Spending>("spending").EntityType.HasKey(e => e.Id);
 
         return builder.GetEdmModel();
     }

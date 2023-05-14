@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using HomeAccounting.Domain.Mapper.Profiles;
 using HomeAccounting.Domain.Services.Abstraction;
 using HomeAccounting.Domain.Services.Realization;
 using HomeAccounting.Domain.Settings.Abstraction;
@@ -8,6 +9,7 @@ using HomeAccounting.Domain.Validators;
 using HomeAccounting.Models;
 using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
+using HomeAccounting.Models.Update;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +23,8 @@ public static class DomainDependencyInjectionExtension
     ) => services
         .AddServices()
         .AddValidators()
-        .AddSettings(configuration);
+        .AddSettings(configuration)
+        .AddMapper();
 
     private static IServiceCollection AddServices(
         this IServiceCollection services
@@ -31,7 +34,9 @@ public static class DomainDependencyInjectionExtension
         .AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>()
         .AddTransient<IValidationService, ValidationService>()
         .AddTransient<IUserService, UserService>()
-        .AddTransient<IAuthService, AuthService>();
+        .AddTransient<IAuthService, AuthService>()
+        .AddTransient<ISpendingService, SpendingService>()
+        .AddTransient<IIncomingService, IncomingService>();
 
     private static IServiceCollection AddValidators(
         this IServiceCollection services
@@ -40,12 +45,21 @@ public static class DomainDependencyInjectionExtension
         .AddTransient<IValidator<ChangePasswordModel>, ChangePasswordModelValidator>()
         .AddTransient<IValidator<CreateUserModel>, CreateUserModelValidator>()
         .AddTransient<IValidator<ResetPasswordModel>, ResetPasswordModelValidator>()
-        .AddTransient<IValidator<SetNewPasswordModel>, SetNewPasswordModelValidator>();
+        .AddTransient<IValidator<SetNewPasswordModel>, SetNewPasswordModelValidator>()
+        .AddTransient<IValidator<CreateIncomingModel>, CreateIncomingValidation>()
+        .AddTransient<IValidator<UpdateIncomingModel>, UpdateIncomingValidation>()
+        .AddTransient<IValidator<CreateSpendingModel>, CreateSpendingValidation>()
+        .AddTransient<IValidator<UpdateSpendingModel>, UpdateSpendingValidation>();
 
     private static IServiceCollection AddMapper(
         this IServiceCollection services
     ) => services
-        .AddAutoMapper(config => config.AddProfiles(new List<Profile>()));
+        .AddAutoMapper(config => config.AddProfiles(new List<Profile>
+        {
+            new UserMapperProfile(),
+            new IncomingMapperProfile(),
+            new SpendingMapperProfile()
+        }));
 
     private static IServiceCollection AddSettings(
         this IServiceCollection services,

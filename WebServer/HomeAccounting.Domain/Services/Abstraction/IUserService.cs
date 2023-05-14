@@ -1,7 +1,7 @@
-﻿using HomeAccounting.Data.Entities;
-using HomeAccounting.Models;
+﻿using HomeAccounting.Models;
 using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
+using HomeAccounting.Models.Views;
 
 namespace HomeAccounting.Domain.Services.Abstraction;
 
@@ -22,7 +22,7 @@ public interface IUserService
         CancellationToken cancellationToken = default
     );
 
-    public Task<User?> GetUserAsync(
+    public Task<UserView?> GetUserAsync(
         Guid id,
         CancellationToken cancellationToken = default
     );
