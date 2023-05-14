@@ -96,16 +96,15 @@ public partial class MainLayout : IDisposable
     {
         Init();
 
-        if (IsAuth)
-        {
-            return;
-        }
+        _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+        await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
+        await InvokeAsync(StateHasChanged);
 
         _currentUser = await AuthService.GetCurrentUserAsync();
 
-        if (_currentUser?.FirstName?.Length > 0)
+        if (_currentUser?.FirstName.Length > 0)
         {
-            FirstLetterOfName = _currentUser?.FirstName[0];
+            FirstLetterOfName = _currentUser.FirstName[0];
         }
 
         FullName = $@"{_currentUser?.FirstName} {_currentUser?.LastName}";
@@ -117,22 +116,12 @@ public partial class MainLayout : IDisposable
     {
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
-            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
-            StateHasChanged();
-        }
-    }
 
     private Task OnSystemPreferenceChangedAsync(bool newValue)
     {
         _isDarkMode = newValue;
-        StateHasChanged();
 
-        return Task.CompletedTask;
+        return InvokeAsync(StateHasChanged);
     }
 
 
