@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\HomeAccounting.UI.Domain\HomeAccounting.UI.Domain.csproj" />
+		<ProjectReference Include="..\HomeAccounting.UI.Domain\HomeAccounting.UI.Domain.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

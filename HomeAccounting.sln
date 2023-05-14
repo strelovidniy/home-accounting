@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeAccounting.Data.Enums",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeAccounting.Data.Entities", "Common\HomeAccounting.Data.Entities\HomeAccounting.Data.Entities.csproj", "{E260BF1B-D741-439F-B954-D41BACF1CA7E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeAccounting.UI.Domain", "HomeAccounting.UI.Domain\HomeAccounting.UI.Domain.csproj", "{F1ECD434-3D6B-4CA0-9149-09404A1D6681}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeAccounting.UI.Domain", "UI\HomeAccounting.UI.Domain\HomeAccounting.UI.Domain.csproj", "{F1ECD434-3D6B-4CA0-9149-09404A1D6681}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

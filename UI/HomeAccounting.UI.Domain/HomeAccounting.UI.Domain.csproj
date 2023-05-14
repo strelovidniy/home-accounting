@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Common\HomeAccounting.Models\HomeAccounting.Models.csproj" />
+		<ProjectReference Include="..\..\Common\HomeAccounting.Models\HomeAccounting.Models.csproj" />
 	</ItemGroup>
 
 </Project>
