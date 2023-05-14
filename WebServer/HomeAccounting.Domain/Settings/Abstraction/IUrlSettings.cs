@@ -8,9 +8,9 @@ public interface IUrlSettings
 
     public string WebApiUrl { get; set; }
 
-    public string P3TwitterUrl { get; set; }
+    public string TwitterUrl { get; set; }
 
-    public string P3FacebookUrl { get; set; }
+    public string FacebookUrl { get; set; }
 
-    public string P3InstagramUrl { get; set; }
+    public string InstagramUrl { get; set; }
 }

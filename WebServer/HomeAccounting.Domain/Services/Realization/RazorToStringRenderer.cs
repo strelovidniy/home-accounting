@@ -58,15 +58,15 @@ internal class RazorViewToStringRenderer : IRazorViewToStringRenderer
             )
             {
                 Model = model,
-                ["WhiteBackgroundUrl"] = $"{_urlSettings.WebApiUrl}api/v2/static-files/white-background",
-                ["P3IconUrl"] = $"{_urlSettings.WebApiUrl}api/v2/static-files/p3-icon",
-                ["TwitterIconUrl"] = $"{_urlSettings.WebApiUrl}api/v2/static-files/twitter-icon",
-                ["FacebookIconUrl"] = $"{_urlSettings.WebApiUrl}api/v2/static-files/facebook-icon",
-                ["InstagramIconUrl"] = $"{_urlSettings.WebApiUrl}api/v2/static-files/instagram-icon",
-                ["DividerUrl"] = $"{_urlSettings.WebApiUrl}api/v2/static-files/divider",
-                ["P3FacebookUrl"] = _urlSettings.P3FacebookUrl,
-                ["P3InstagramUrl"] = _urlSettings.P3InstagramUrl,
-                ["P3TwitterUrl"] = _urlSettings.P3TwitterUrl
+                ["WhiteBackgroundUrl"] = $"{_urlSettings.WebApiUrl}api/v1/static-files/white-background",
+                ["IconUrl"] = $"{_urlSettings.WebApiUrl}api/v1/static-files/icon",
+                ["TwitterIconUrl"] = $"{_urlSettings.WebApiUrl}api/v1/static-files/twitter-icon",
+                ["FacebookIconUrl"] = $"{_urlSettings.WebApiUrl}api/v1/static-files/facebook-icon",
+                ["InstagramIconUrl"] = $"{_urlSettings.WebApiUrl}api/v1/static-files/instagram-icon",
+                ["DividerUrl"] = $"{_urlSettings.WebApiUrl}api/v1/static-files/divider",
+                ["FacebookUrl"] = _urlSettings.FacebookUrl,
+                ["InstagramUrl"] = _urlSettings.InstagramUrl,
+                ["TwitterUrl"] = _urlSettings.TwitterUrl
             },
             new TempDataDictionary(
                 actionContext.HttpContext,

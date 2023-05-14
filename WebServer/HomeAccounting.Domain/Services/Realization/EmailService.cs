@@ -42,7 +42,6 @@ internal class EmailService : IEmailService
     {
         var path = typeof(TModel).Name switch
         {
-            nameof(CreateAccountEmailViewModel) => EmailViewLocation.CreateAccountEmail,
             nameof(ResetPasswordEmailViewModel) => EmailViewLocation.ResetPasswordEmail,
             _ => throw new ApiException(StatusCode.InvalidEmailModel)
         };

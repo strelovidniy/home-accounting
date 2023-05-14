@@ -6,7 +6,7 @@ public class ImageLocation : RichEnum<string>
 {
     private const string Base = "HomeAccounting.Server.Views.Images.";
 
-    public static ImageLocation P3Icon => new($"{Base}Logo.png");
+    public static ImageLocation Icon => new($"{Base}Logo.png");
 
     public static ImageLocation TwitterIcon => new($"{Base}Twitter.png");
 

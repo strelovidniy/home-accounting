@@ -99,6 +99,11 @@ public partial class MainLayout : IDisposable
     {
         Init();
 
+        if (IsAuth)
+        {
+            return;
+        }
+
         _currentUser = await AuthService.GetCurrentUserAsync();
 
         if (_currentUser?.FirstName?.Length > 0)

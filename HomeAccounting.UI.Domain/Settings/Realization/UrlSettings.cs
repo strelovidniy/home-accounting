@@ -10,9 +10,9 @@ internal class UrlSettings : IUrlSettings
 
     public string WebApiUrl { get; set; } = null!;
 
-    public string P3TwitterUrl { get; set; } = null!;
+    public string TwitterUrl { get; set; } = null!;
 
-    public string P3FacebookUrl { get; set; } = null!;
+    public string FacebookUrl { get; set; } = null!;
 
-    public string P3InstagramUrl { get; set; } = null!;
+    public string InstagramUrl { get; set; } = null!;
 }
