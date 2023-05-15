@@ -212,3 +212,12 @@ tr > th.auto-computated, .auto-computated, .little-blue {
 tr > th.cost-detail, .cost-detail, .little-green {
     background: #cdefc6 !important;
 }
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
