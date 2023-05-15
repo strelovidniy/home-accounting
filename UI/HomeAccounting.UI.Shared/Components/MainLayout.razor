@@ -25,29 +25,12 @@ else
                        Edge="Edge.Start"
                        Icon="@Icons.Material.Filled.Menu"
                        OnClick="@(() => _drawerOpen = !_drawerOpen)"/>
-
-        <MudText Typo="Typo.body1"
-                 Class="mr-5 text-white">
-            Some text here
-        </MudText>
         <MudSpacer/>
-
-        <MudHidden Breakpoint="Breakpoint.MdAndUp"
-                   Invert="true">
-            <MudText Typo="Typo.h6"
-                     Class="text-white">
-                Some text here
-            </MudText>
-            <MudDivider
-                Vertical="true"
-                FlexItem="true"
-                DividerType="DividerType.Middle"
-                Class="mx-4 my-5"/>
-            <MudText Typo="Typo.body1"
-                     Class="mr-5 text-white">
-                Some text here
-            </MudText>
-        </MudHidden>
+        <MudDivider
+            Vertical="true"
+            FlexItem="true"
+            DividerType="DividerType.Middle"
+            Class="mx-4 my-5"/>
 
         <MudMenu Direction="Direction.Left"
                  OffsetX="true"
@@ -94,7 +77,8 @@ else
     </MudAppBar>
 
     <MudDrawer @bind-Open="@_drawerOpen"
-               Elevation="0">
+               Elevation="0"
+               Style="background-color: var(--mud-palette-background-grey)">
         <MudDrawerHeader>
             <div class="d-flex flex-row align-items-center justify-content-center w-100">
                 <div class="drawer-logo">
@@ -109,14 +93,14 @@ else
         <MudNavMenu>
             <MudNavLink Href="/"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.Filled.Dashboard">
+                        Icon="@Icons.Material.Filled.Dashboard">
                 Home
             </MudNavLink>
 
-            <MudNavLink Href="/page1"
+            <MudNavLink Href="/account"
                         Match="NavLinkMatch.All"
                         Icon="@Icons.TwoTone.ViewList">
-                Page 1
+                Account
             </MudNavLink>
 
 
@@ -128,13 +112,13 @@ else
 
             <MudNavLink Href="/page3"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.Filled.CalendarToday">
+                        Icon="@Icons.Material.Filled.CalendarToday">
                 Page 3
             </MudNavLink>
 
             <MudNavLink Href="/page4"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.Filled.Inventory2">
+                        Icon="@Icons.Material.Filled.Inventory2">
                 Page 4
             </MudNavLink>
 
@@ -146,7 +130,7 @@ else
 
             <MudNavGroup Title="Administration"
                          @bind-Expanded="@_adminExpanded"
-                         Icon="@Icons.Filled.AdminPanelSettings">
+                         Icon="@Icons.Material.Filled.AdminPanelSettings">
 
                 <MudNavLink Href="/admin/page1"
                             Match="NavLinkMatch.All"
@@ -203,13 +187,33 @@ else
 
             <MudNavGroup Title="Settings"
                          @bind-Expanded="@_settingsExpanded"
-                         Icon="@Icons.Filled.Settings">
+                         Icon="@Icons.Material.Filled.Settings">
 
-                <MudNavLink Href="/settings/page1"
-                            Icon="@Icons.TwoTone.Category">
-                    Settings page 1
+            <MudNavGroup Title="Theme"
+                         Icon="@Icons.Material.Filled.InvertColors">
+
+                <MudNavLink Icon="@Icons.Material.TwoTone.DarkMode"
+                            IconColor="Color.Default"
+                            OnClick="@(() => OnThemeChangedAsync("System Default"))"
+                            Style="@(_theme == "System Default" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
+                    System Default
                 </MudNavLink>
 
+                <MudNavLink Icon="@Icons.Material.Filled.DarkMode"
+                            IconColor="Color.Default"
+                            OnClick="@(() => OnThemeChangedAsync("Light"))"
+                            Style="@(_theme == "Light" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
+                    Light
+                </MudNavLink>
+
+                <MudNavLink Icon="@Icons.Material.Outlined.DarkMode"
+                            IconColor="Color.Default"
+                            OnClick="@(() => OnThemeChangedAsync("Dark"))"
+                            Style="@(_theme == "Dark" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary); font-weight: 500 !important" : null)">
+                    Dark
+                </MudNavLink>
+                
+            </MudNavGroup>
                 <MudNavLink Href="/settings/page2"
                             Icon="@Icons.TwoTone.Task">
                     Settings page 2
@@ -255,8 +259,10 @@ else
                    Dense="true"
                    Class="ml-0 w-100"
                    Bottom="true"
-                   Style="bottom: 0; position: fixed;">
-            <MudText>
+                   Style="bottom: 0; 
+                          position: fixed;
+                          background-color: var(--mud-palette-background-grey)">
+            <MudText Style="color: var(--mud-palette-text-primary)">
                 Copyright © 2023
                 <MudLink Href="#"
                          Underline="@Underline.Always">
@@ -283,7 +289,7 @@ else
 
     <MudScrollToTop>
         <MudFab Color="Color.Tertiary"
-                Icon="@Icons.Filled.ArrowCircleUp"
+                Icon="@Icons.Material.Filled.ArrowCircleUp"
                 title="Go to top"/>
     </MudScrollToTop>
 }

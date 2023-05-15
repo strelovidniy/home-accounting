@@ -1,0 +1,37 @@
+﻿@page "/account"
+
+@using Microsoft.AspNetCore.Components.Web
+@using MudBlazor
+
+<PageTitle>Account</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12"
+             md="10"
+             lg="8"
+             xl="6">
+        <MudContainer Style="background-color: var(--mud-palette-surface); 
+                             border-radius: 10px; 
+                             box-shadow: 0px 0px 30px 0px rgb(0 0 0 / 50%);
+                             height: fit-content;
+                             padding: 30px;">
+            <MudGrid>
+                <MudItem xs="9"
+                         md="5">
+                    <MudInput T="string"
+                              InputType="InputType.Text"
+                              Label="Monobank Token"
+                              Class="w-100"
+                              Variant="Variant.Outlined"/>
+                </MudItem>
+                <MudItem xs="3"
+                         md="1">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary">
+                        Submit
+                    </MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudContainer>
+    </MudItem>
+</MudGrid>

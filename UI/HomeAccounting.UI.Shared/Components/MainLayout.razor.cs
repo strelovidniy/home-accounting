@@ -16,6 +16,7 @@ public partial class MainLayout : IDisposable
     private bool _settingsExpanded = true;
     private bool _adminExpanded = true;
 
+    private string _theme = null!;
     private bool _isDarkMode;
     private MudThemeProvider _mudThemeProvider = null!;
 
@@ -127,9 +128,40 @@ public partial class MainLayout : IDisposable
     {
         if (firstRender)
         {
-            _isDarkMode = await _mudThemeProvider.GetSystemPreference();
-            await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
-            await InvokeAsync(StateHasChanged);
+            _theme = await LocalStorageService.GetItemAsync<string>("theme") ?? "System Default";
+
+            await OnThemeChangedAsync(_theme);
+        }
+    }
+
+    private async Task OnThemeChangedAsync(string theme)
+    {
+        _theme = theme;
+
+        await LocalStorageService.SetItemAsStringAsync("theme", _theme);
+
+        switch (_theme)
+        {
+            case "System Default":
+                _isDarkMode = await _mudThemeProvider.GetSystemPreference();
+                await _mudThemeProvider.WatchSystemPreference(OnSystemPreferenceChangedAsync);
+                await InvokeAsync(StateHasChanged);
+
+                break;
+            case "Dark":
+                _isDarkMode = true;
+                await InvokeAsync(StateHasChanged);
+                await _mudThemeProvider.WatchSystemPreference(_ => Task.CompletedTask);
+                await InvokeAsync(StateHasChanged);
+
+                break;
+            case "Light":
+                _isDarkMode = false;
+                await InvokeAsync(StateHasChanged);
+                await _mudThemeProvider.WatchSystemPreference(_ => Task.CompletedTask);
+                await InvokeAsync(StateHasChanged);
+
+                break;
         }
     }
 
