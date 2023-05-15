@@ -15,19 +15,19 @@ public partial class Index : IDisposable
 
     private readonly ChartOptions _chartOptions = new();
 
-    private string[] _xAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+    private string[] _xAxisLabels = { };
 
     private List<ChartSeries> _series = new()
     {
         new ChartSeries
         {
             Name = "Incoming",
-            Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 }
+            Data = new double[] { }
         },
         new ChartSeries
         {
             Name = "Spending",
-            Data = new double[] { 10, 41, 35, 51, 49, 62, 69, 91, 148 }
+            Data = new double[] { }
         }
     };
 
@@ -97,6 +97,9 @@ public partial class Index : IDisposable
                 .Filter(incoming => incoming.CreatedAt <= _dateRange.End.Value);
         }
 
+        incomingsBuilder = incomingsBuilder
+            .OrderByDescending(incoming => incoming.CreatedAt);
+
         var incomingsResponse = await HttpClient.GetFromOdataAsync<IncomingView>(incomingsBuilder, cancellationToken);
 
         _incomings = incomingsResponse?.Value ?? _incomings;
@@ -117,6 +120,9 @@ public partial class Index : IDisposable
             spendingsBuilder = spendingsBuilder
                 .Filter(spending => spending.CreatedAt <= _dateRange.End.Value);
         }
+
+        spendingsBuilder = spendingsBuilder
+            .OrderByDescending(spending => spending.CreatedAt);
 
         var spendingResponse = await HttpClient.GetFromOdataAsync<SpendingView>(spendingsBuilder, cancellationToken);
 
