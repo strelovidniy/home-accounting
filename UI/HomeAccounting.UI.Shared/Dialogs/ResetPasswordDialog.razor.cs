@@ -11,6 +11,7 @@ public partial class ResetPasswordDialog : IDisposable
 {
     private string _email = string.Empty;
 
+    private bool _processing;
     private bool _isSuccessSubmit = true;
 
     private MudForm _form = null!;
@@ -74,11 +75,15 @@ public partial class ResetPasswordDialog : IDisposable
 
     private async Task OnSubmitAsync()
     {
+        _processing = true;
+
         await _form.Validate();
 
         if (!_form.IsValid)
         {
             Snackbar.Add(_form.Errors.FirstOrDefault(), Severity.Error);
+
+            _processing = false;
 
             return;
         }
@@ -89,6 +94,8 @@ public partial class ResetPasswordDialog : IDisposable
         {
             Submit();
         }
+
+        _processing = false;
 
         _isSuccessSubmit = true;
     }
