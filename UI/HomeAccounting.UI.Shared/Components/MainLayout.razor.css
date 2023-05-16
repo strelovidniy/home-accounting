@@ -88,24 +88,3 @@ main { flex: 1; }
     font-weight: 600;
     white-space: nowrap;
 }
-
-
-.theme-selector ::deep.mud-input-slot.mud-input-root {
-    color: white !important;
-}
-
-.theme-selector ::deep.mat-input-slot {
-    color: white !important;
-}
-
-.theme-selector ::deep.mud-input-adornment svg {
-    fill: white !important;
-}
-
-.theme-selector ::deep.mud-input.mud-input-underline:before {
-    border-bottom: 1px solid var(--mud-palette-lines-inputs);
-}
-
-.theme-selector ::deep.mud-input.mud-input-underline:before:hover {
-    border-bottom: 1px solid var(--mud-palette-lines-inputs);
-}
