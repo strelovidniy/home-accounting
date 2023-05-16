@@ -47,7 +47,7 @@ public class UserController : BaseController
         return Ok();
     }
 
-    [HttpPost("change-password")]
+    [HttpPut("change-password")]
     public async Task<IActionResult> ChangePasswordAsync(
         [FromBody] ChangePasswordModel changePasswordModel,
         CancellationToken cancellationToken = default

@@ -78,6 +78,7 @@ else
 
     <MudDrawer @bind-Open="@_drawerOpen"
                Elevation="0"
+               Breakpoint="Breakpoint.Lg"
                Style="background-color: var(--mud-palette-background-grey)">
         <MudDrawerHeader>
             <div class="d-flex flex-row align-items-center justify-content-center w-100">
@@ -271,7 +272,7 @@ else
                 The Disclaimer Team
             </MudText>
             <MudSpacer/>
-            <MudText>
+            <MudText Style="@("transition: all 225ms cubic-bezier(0, 0, 0.2, 1);" + (_drawerOpen ? "margin-right:240px" : "margin-right: 0"))">
                 <MudLink Href="#"
                          Underline="@Underline.Always"
                          Class="mr-3">

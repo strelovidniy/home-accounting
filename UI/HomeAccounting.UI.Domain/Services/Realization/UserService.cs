@@ -1,4 +1,5 @@
 ﻿using HomeAccounting.Models;
+using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
 using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 using HomeAccounting.UI.Domain.Services.Abstraction;
@@ -40,6 +41,47 @@ internal class UserService : IUserService
         .PostAsync(
             "api/v1/users/sign-up",
             _httpClient.CreateJsonContent(createUserModel),
+            cancellationToken
+        );
+
+    public Task ChangeAvatarAsync(
+        byte[] bytes,
+        CancellationToken cancellationToken = default
+    ) => _httpClient
+        .PostAsync(
+            "api/v1/users/change-avatar",
+            new MultipartFormDataContent
+            {
+                new ByteArrayContent(bytes)
+            },
+            cancellationToken
+        );
+
+    public Task<string?> GetMonobankTokenAsync(
+        CancellationToken cancellationToken = default
+    ) => _httpClient
+        .GetAsync<string>(
+            "api/v1/users/monobank-token",
+            cancellationToken
+        );
+
+    public Task SetMonobankTokenAsync(
+        SetMonobankTokenModel monobankTokenModel,
+        CancellationToken cancellationToken = default
+    ) => _httpClient
+        .PutAsync(
+            "api/v1/users/monobank-token",
+            _httpClient.CreateJsonContent(monobankTokenModel),
+            cancellationToken
+        );
+
+    public Task ChangePasswordAsync(
+        ChangePasswordModel changePasswordModel,
+        CancellationToken cancellationToken = default
+    ) => _httpClient
+        .PutAsync(
+            "api/v1/users/change-password",
+            _httpClient.CreateJsonContent(changePasswordModel),
             cancellationToken
         );
 }
