@@ -1,0 +1,147 @@
+﻿@page "/incoming"
+
+@using HomeAccounting.Models.Views
+@using Microsoft.AspNetCore.Components.Web
+@using MudBlazor
+
+<PageTitle>
+    Incoming
+</PageTitle>
+
+@if (_isPageLoading)
+{
+    <div class="loader-container">
+        <MudProgressCircular Color="Color.Primary" 
+                             Style="height: 10%; width: 10%;" 
+                             Indeterminate="true"/>
+    </div>
+}
+else
+{
+    <div style="padding: 5px;"></div>
+    <MudPaper Elevation="0"
+              Class="border">
+        <MudText Typo="Typo.h6"
+                 Class="px-4 py-2">
+            Incoming
+        </MudText>
+        <MudTable @ref="_table"
+                  Dense="@false"
+                  Elevation="0"
+                  Hover="@true"
+                  ServerData="@ServerReloadAsync"
+                  FixedHeader="true"
+                  FixedFooter="true"
+                  Height="calc(100vh - 340px)">
+            <ToolBarContent>
+                <div class="justify-center mud-text-align-center px-1 no-nested-margin">
+                    <MudButton OnClick="@AddIncomingDialogAsync"
+                               StartIcon="@Icons.Material.Filled.PersonAdd"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="mr-2 mb-2">
+                        Add Incoming
+                    </MudButton>
+                </div>
+                <SpinLoader IsLoading="_isLoading" 
+                            Spinner="SpinnerType.Wave" 
+                            Class="ml-2"/>
+                <MudSpacer/>
+                <MudTextField T="string"
+                              Value="_searchString"
+                              ValueChanged="async value => { _searchString = value; await _table.ReloadServerData(); }"
+                              Placeholder="Search"
+                              Variant="@Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Margin="@Margin.Dense"
+                              IconSize="Size.Medium"
+                              Class="mt-0">
+                </MudTextField>
+                <SpinLoader IsLoading="_isLoading"
+                            Spinner="SpinnerType.Wave"/>
+            </ToolBarContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="Actions"
+                       Style="text-align: left">
+                    <MudMenu Label="Actions"
+                             Variant="Variant.Filled"
+                             DisableElevation="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                             IconColor="Color.Secondary"
+                             Direction="Direction.Left"
+                             OffsetX="true">
+                        <MudMenuItem OnClick="@(async () => { await UpdateIncomingDialogAsync(context); })"
+                                     OnTouch="@(async () => { await UpdateIncomingDialogAsync(context); })">
+                            Update
+                        </MudMenuItem>
+                        <MudMenuItem OnClick="@(async () => { await DeleteIncomingAsync(context); })"
+                                     OnTouch="@(async () => { await DeleteIncomingAsync(context); })">
+                            Delete
+                        </MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+                <MudTd DataLabel="Amount">
+                    @context.Amount
+                </MudTd>
+                <MudTd DataLabel="Description">
+                    @context.Description
+                </MudTd>
+                <MudTd DataLabel="IncomingDate">
+                    @context.IncomingDate
+                </MudTd>
+                <MudTd DataLabel="IncomingUpdatedAt">
+                    @context.IncomingUpdatedAt
+                </MudTd>
+            </RowTemplate>
+
+            <NoRecordsContent>
+                <MudText>
+                    No records found.
+                </MudText>
+            </NoRecordsContent>
+
+            <LoadingContent>
+                <MudText>
+                    Loading...
+                </MudText>
+            </LoadingContent>
+
+            <HeaderContent>
+                <MudTh>
+                    Action
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="Amount"
+                                       T="IncomingView">
+                        Amount
+                    </MudTableSortLabel>
+
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="Description"
+                                       T="IncomingView">
+                        Description
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="IncomingDate"
+                                       T="IncomingView">
+                        Incoming Date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="IncomingUpdatedAt"
+                                       T="IncomingView">
+                        Incoming Updated At
+                    </MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+
+            <PagerContent>
+                <MudTablePager/>
+            </PagerContent>
+        </MudTable>
+    </MudPaper>
+}

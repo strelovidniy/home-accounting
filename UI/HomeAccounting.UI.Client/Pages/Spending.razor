@@ -1,0 +1,148 @@
+﻿@page "/spending"
+
+@using Microsoft.AspNetCore.Components.Web
+@using BlazorPro.Spinkit
+@using HomeAccounting.Models.Views
+@using MudBlazor
+
+<PageTitle>
+    Spending
+</PageTitle>
+
+@if (_isPageLoading)
+{
+    <div class="loader-container">
+        <MudProgressCircular Color="Color.Primary" 
+                             Style="height: 10%; width: 10%;" 
+                             Indeterminate="true"/>
+    </div>
+}
+else
+{
+    <div style="padding: 5px;"></div>
+    <MudPaper Elevation="0"
+              Class="border">
+        <MudText Typo="Typo.h6"
+                 Class="px-4 py-2">
+            Spending
+        </MudText>
+        <MudTable @ref="_table"
+                  Dense="@false"
+                  Elevation="0"
+                  Hover="@true"
+                  ServerData="@ServerReloadAsync"
+                  FixedHeader="true"
+                  FixedFooter="true"
+                  Height="calc(100vh - 340px)">
+            <ToolBarContent>
+                <div class="justify-center mud-text-align-center px-1 no-nested-margin">
+                    <MudButton OnClick="@AddSpendingDialogAsync"
+                               StartIcon="@Icons.Material.Filled.PersonAdd"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="mr-2 mb-2">
+                        Add Spending
+                    </MudButton>
+                </div>
+                <SpinLoader IsLoading="_isLoading" 
+                            Spinner="SpinnerType.Wave" 
+                            Class="ml-2"/>
+                <MudSpacer/>
+                <MudTextField T="string"
+                              Value="_searchString"
+                              ValueChanged="async value => { _searchString = value; await _table.ReloadServerData(); }"
+                              Placeholder="Search"
+                              Variant="@Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Margin="@Margin.Dense"
+                              IconSize="Size.Medium"
+                              Class="mt-0">
+                </MudTextField>
+                <SpinLoader IsLoading="_isLoading"
+                            Spinner="SpinnerType.Wave"/>
+            </ToolBarContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="Actions"
+                       Style="text-align: left">
+                    <MudMenu Label="Actions"
+                             Variant="Variant.Filled"
+                             DisableElevation="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                             IconColor="Color.Secondary"
+                             Direction="Direction.Left"
+                             OffsetX="true">
+                        <MudMenuItem OnClick="@(async () => { await UpdateSpendingDialogAsync(context); })"
+                                     OnTouch="@(async () => { await UpdateSpendingDialogAsync(context); })">
+                            Update
+                        </MudMenuItem>
+                        <MudMenuItem OnClick="@(async () => { await DeleteSpendingAsync(context); })"
+                                     OnTouch="@(async () => { await DeleteSpendingAsync(context); })">
+                            Delete
+                        </MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+                <MudTd DataLabel="Amount">
+                    @context.Amount
+                </MudTd>
+                <MudTd DataLabel="Description">
+                    @context.Description
+                </MudTd>
+                <MudTd DataLabel="SpendingDate">
+                    @context.SpendingDate
+                </MudTd>
+                <MudTd DataLabel="SpendingUpdatedAt">
+                    @context.SpendingUpdatedAt
+                </MudTd>
+            </RowTemplate>
+
+            <NoRecordsContent>
+                <MudText>
+                    No records found.
+                </MudText>
+            </NoRecordsContent>
+
+            <LoadingContent>
+                <MudText>
+                    Loading...
+                </MudText>
+            </LoadingContent>
+
+            <HeaderContent>
+                <MudTh>
+                    Action
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="Amount"
+                                       T="SpendingView">
+                        Amount
+                    </MudTableSortLabel>
+
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="Description"
+                                       T="SpendingView">
+                        Description
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="SpendingDate"
+                                       T="SpendingView">
+                        Spending Date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="SpendingUpdatedAt"
+                                       T="SpendingView">
+                        Spending Updated At
+                    </MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+
+            <PagerContent>
+                <MudTablePager/>
+            </PagerContent>
+        </MudTable>
+    </MudPaper>
+}

@@ -100,145 +100,64 @@ else
 
             <MudNavLink Href="/account"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.TwoTone.ViewList">
+                        Icon="@Icons.Material.Outlined.AccountCircle">
                 Account
             </MudNavLink>
 
 
-            <MudNavLink Href="/page2"
+            <MudNavLink Href="/spending"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.TwoTone.Comment">
-                Page 2
+                        Icon="@Icons.Material.Outlined.ShoppingCart">
+                Spending
             </MudNavLink>
 
-            <MudNavLink Href="/page3"
+            <MudNavLink Href="/incoming"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.Material.Filled.CalendarToday">
-                Page 3
+                        Icon="@Icons.Material.Outlined.Payments">
+                Incoming
             </MudNavLink>
 
-            <MudNavLink Href="/page4"
+            <MudNavLink Href="/credits"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.Material.Filled.Inventory2">
-                Page 4
+                        Icon="@Icons.Material.Outlined.AccountBalance">
+                Credits
             </MudNavLink>
 
-            <MudNavLink Href="/page5"
+            <MudNavLink Href="/deposits"
                         Match="NavLinkMatch.All"
-                        Icon="@Icons.Custom.FileFormats.FileExcel">
-                Page 5
+                        Icon="@Icons.Material.Outlined.AttachMoney">
+                Deposits
             </MudNavLink>
-
-            <MudNavGroup Title="Administration"
-                         @bind-Expanded="@_adminExpanded"
-                         Icon="@Icons.Material.Filled.AdminPanelSettings">
-
-                <MudNavLink Href="/admin/page1"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.GroupAdd">
-                    Admin page 1
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page2"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.People">
-                    Admin page 2
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page3"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.Report">
-                    Admin page 3
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page4"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.AdminPanelSettings">
-                    Admin page 4
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page5"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.FileUpload">
-                    Admin page 5
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page6"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.Work">
-                    Admin page 6
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page7"
-                            Icon="@Icons.TwoTone.Home">
-                    Admin page 7
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page8"
-                            Icon="@Icons.TwoTone.PrivacyTip">
-                    Admin page 8
-                </MudNavLink>
-
-                <MudNavLink Href="/admin/page9"
-                            Match="NavLinkMatch.All"
-                            Icon="@Icons.TwoTone.Code">
-                    Admin page 9
-                </MudNavLink>
-            </MudNavGroup>
-
+            
             <MudNavGroup Title="Settings"
                          @bind-Expanded="@_settingsExpanded"
                          Icon="@Icons.Material.Filled.Settings">
 
-            <MudNavGroup Title="Theme"
-                         Icon="@Icons.Material.Filled.InvertColors">
+                <MudNavGroup Title="Theme"
+                             Icon="@Icons.Material.Filled.InvertColors">
 
-                <MudNavLink Icon="@Icons.Material.TwoTone.DarkMode"
-                            IconColor="Color.Default"
-                            OnClick="@(() => OnThemeChangedAsync("System Default"))"
-                            Style="@(_theme == "System Default" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
-                    System Default
-                </MudNavLink>
+                    <MudNavLink Icon="@Icons.Material.TwoTone.DarkMode"
+                                IconColor="Color.Default"
+                                OnClick="@(() => OnThemeChangedAsync("System Default"))"
+                                Style="@(_theme == "System Default" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
+                        System Default
+                    </MudNavLink>
 
-                <MudNavLink Icon="@Icons.Material.Filled.DarkMode"
-                            IconColor="Color.Default"
-                            OnClick="@(() => OnThemeChangedAsync("Light"))"
-                            Style="@(_theme == "Light" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
-                    Light
-                </MudNavLink>
+                    <MudNavLink Icon="@Icons.Material.Filled.DarkMode"
+                                IconColor="Color.Default"
+                                OnClick="@(() => OnThemeChangedAsync("Light"))"
+                                Style="@(_theme == "Light" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
+                        Light
+                    </MudNavLink>
 
-                <MudNavLink Icon="@Icons.Material.Outlined.DarkMode"
-                            IconColor="Color.Default"
-                            OnClick="@(() => OnThemeChangedAsync("Dark"))"
-                            Style="@(_theme == "Dark" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary); font-weight: 500 !important" : null)">
-                    Dark
-                </MudNavLink>
-                
-            </MudNavGroup>
-                <MudNavLink Href="/settings/page2"
-                            Icon="@Icons.TwoTone.Task">
-                    Settings page 2
-                </MudNavLink>
-
-                <MudNavLink Href="/settings/page3"
-                            Icon="@Icons.TwoTone.Badge">
-                    Settings page 3
-                </MudNavLink>
-
-                <MudNavLink Href="/settings/page4"
-                            Icon="@Icons.TwoTone.Comment">
-                    Settings page 4
-                </MudNavLink>
-
-                <MudNavLink Href="/settings/page5"
-                            Icon="@Icons.TwoTone.TaxiAlert">
-                    Settings page 5
-                </MudNavLink>
-
-                <MudNavLink Href="/settings/page6"
-                            Icon="@Icons.TwoTone.Topic">
-                    Settings page 6
-                </MudNavLink>
+                    <MudNavLink Icon="@Icons.Material.Outlined.DarkMode"
+                                IconColor="Color.Default"
+                                OnClick="@(() => OnThemeChangedAsync("Dark"))"
+                                Style="@(_theme == "Dark" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary); font-weight: 500 !important" : null)">
+                        Dark
+                    </MudNavLink>
+                    
+                </MudNavGroup>
             </MudNavGroup>
         </MudNavMenu>
     </MudDrawer>

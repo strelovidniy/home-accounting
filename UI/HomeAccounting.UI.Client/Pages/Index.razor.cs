@@ -1,5 +1,4 @@
-﻿using HomeAccounting.Data.Entities;
-using HomeAccounting.Models.Views;
+﻿using HomeAccounting.Models.Views;
 using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 using HomeAccounting.UI.Domain.Services.Abstraction;
 using Microsoft.AspNetCore.Components;
@@ -34,6 +33,8 @@ public partial class Index : IDisposable
     private int _selectedIndex = -1;
 
     private bool _processing;
+
+    private bool _isPageLoading = true;
 
     private List<SpendingView> _spendings = new();
     private List<IncomingView> _incomings = new();
@@ -70,7 +71,14 @@ public partial class Index : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected override Task OnInitializedAsync() => LoadSpendingsAndIncomingsAsync(_cts.Token);
+    protected override async Task OnInitializedAsync()
+    {
+        _isPageLoading = true;
+
+        await LoadSpendingsAndIncomingsAsync(_cts.Token);
+
+        _isPageLoading = false;
+    }
 
     private async Task LoadSpendingsAndIncomingsAsync(
         CancellationToken cancellationToken = default
@@ -82,7 +90,7 @@ public partial class Index : IDisposable
         _averageSpending = await SpendingService.GetAverageSpendingAsync(cancellationToken);
 
         var incomingsBuilder = new ODataQueryBuilder("api/odata")
-            .For<Incoming>("incomings")
+            .For<Data.Entities.Incoming>("incomings")
             .ByList();
 
         if (_dateRange.Start.HasValue)
@@ -106,7 +114,7 @@ public partial class Index : IDisposable
         _incomingsTotalCount = incomingsResponse?.Count ?? _incomingsTotalCount;
 
         var spendingsBuilder = new ODataQueryBuilder("api/odata")
-            .For<Spending>("spendings")
+            .For<Data.Entities.Spending>("spendings")
             .ByList();
 
         if (_dateRange.Start.HasValue)
@@ -183,6 +191,8 @@ public partial class Index : IDisposable
         _chartOptions.YAxisFormat = "$0";
 
         _processing = false;
+
+        _isPageLoading = false;
 
         await InvokeAsync(StateHasChanged);
 

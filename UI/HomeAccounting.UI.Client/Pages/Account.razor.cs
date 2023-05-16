@@ -11,7 +11,7 @@ using MudBlazor;
 
 namespace HomeAccounting.UI.Client.Pages;
 
-public partial class Account
+public partial class Account : IDisposable
 {
     private readonly CancellationTokenSource _cts = new();
     private bool _isSuccessSubmit = true;
@@ -23,6 +23,8 @@ public partial class Account
     private string? _confirmNewPassword;
     private bool _processingMonobankToken;
     private bool _processingChangePassword;
+
+    private bool _isPageLoading = true;
 
     private MudForm _monobankTokenForm = null!;
     private MudForm _changePasswordForm = null!;
@@ -45,13 +47,23 @@ public partial class Account
     [Inject]
     private IHomeAccountingHttpClient HttpClient { get; set; } = null!;
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
     protected override async Task OnInitializedAsync()
     {
+        _isPageLoading = true;
+
         HttpClient.OnValidationError += OnValidationError;
         HttpClient.OnError += OnError;
 
         _user = await AuthService.GetCurrentUserAsync(_cts.Token);
         _monobankToken = await UserService.GetMonobankTokenAsync(_cts.Token);
+
+        _isPageLoading = false;
     }
 
     private void OnValidationError(ApiErrorResult? _)
@@ -213,5 +225,32 @@ public partial class Account
             Snackbar.Add("Successfully Changed Avatar", Severity.Success);
             NavigationManager.NavigateTo(NavigationManager.Uri, true);
         }
+    }
+
+    private void ReleaseUnmanagedResources()
+    {
+        HttpClient.OnValidationError -= OnValidationError;
+        HttpClient.OnError -= OnError;
+    }
+
+    private void Dispose(bool disposing)
+    {
+        ReleaseUnmanagedResources();
+
+        if (!disposing)
+        {
+            return;
+        }
+
+        _cts.Cancel();
+        _cts.Dispose();
+        _monobankTokenForm.Dispose();
+        _changePasswordForm.Dispose();
+        Snackbar.Dispose();
+    }
+
+    ~Account()
+    {
+        Dispose(false);
     }
 }

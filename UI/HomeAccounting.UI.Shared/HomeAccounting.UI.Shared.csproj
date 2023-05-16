@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
 		<PackageReference Include="Chronos.Blazor.Cropper" Version="1.2.14" />
 		<PackageReference Include="MudBlazor" Version="6.2.3" />
 	</ItemGroup>
