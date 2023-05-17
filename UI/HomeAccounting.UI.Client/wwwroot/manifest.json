@@ -1,6 +1,6 @@
 {
-  "name": "HomeAccounting",
-  "short_name": "HomeAccounting",
+  "name": "Home Accounting",
+  "short_name": "Home Accounting",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
