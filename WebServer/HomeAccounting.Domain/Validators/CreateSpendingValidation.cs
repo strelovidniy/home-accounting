@@ -12,7 +12,7 @@ internal class CreateSpendingValidation : AbstractValidator<CreateSpendingModel>
     {
         RuleFor(createSpendingModel => createSpendingModel.UserId)
             .MustAsync(validationService.IsUserExistsAsync)
-            .WithStatusCode(StatusCode.AmountMustBeGreaterThanZero)
+            .WithStatusCode(StatusCode.UserNotFound)
             .Must(validationService.IsUserIsCurrentUser)
             .WithStatusCode(StatusCode.YouCanOnlyAddSpendingForYourself);
 

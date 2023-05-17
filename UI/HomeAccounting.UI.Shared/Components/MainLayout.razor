@@ -136,21 +136,21 @@ else
                 <MudNavGroup Title="Theme"
                              Icon="@Icons.Material.Filled.InvertColors">
 
-                    <MudNavLink Icon="@Icons.Material.TwoTone.DarkMode"
+                    <MudNavLink Icon="@Icons.Material.TwoTone.AutoAwesome"
                                 IconColor="Color.Default"
                                 OnClick="@(() => OnThemeChangedAsync("System Default"))"
                                 Style="@(_theme == "System Default" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
                         System Default
                     </MudNavLink>
 
-                    <MudNavLink Icon="@Icons.Material.Filled.DarkMode"
+                    <MudNavLink Icon="@Icons.Material.Filled.LightMode"
                                 IconColor="Color.Default"
                                 OnClick="@(() => OnThemeChangedAsync("Light"))"
                                 Style="@(_theme == "Light" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary);" : null)">
                         Light
                     </MudNavLink>
 
-                    <MudNavLink Icon="@Icons.Material.Outlined.DarkMode"
+                    <MudNavLink Icon="@Icons.Material.Filled.DarkMode"
                                 IconColor="Color.Default"
                                 OnClick="@(() => OnThemeChangedAsync("Dark"))"
                                 Style="@(_theme == "Dark" ? "background-color: #1f58731c !important; color: var(--mud-palette-primary); font-weight: 500 !important" : null)">

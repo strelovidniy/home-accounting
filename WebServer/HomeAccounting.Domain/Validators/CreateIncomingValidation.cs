@@ -12,7 +12,7 @@ internal class CreateIncomingValidation : AbstractValidator<CreateIncomingModel>
     {
         RuleFor(createIncomingModel => createIncomingModel.UserId)
             .MustAsync(validationService.IsUserExistsAsync)
-            .WithStatusCode(StatusCode.AmountMustBeGreaterThanZero)
+            .WithStatusCode(StatusCode.UserNotFound)
             .Must(validationService.IsUserIsCurrentUser)
             .WithStatusCode(StatusCode.YouCanOnlyAddIncomingForYourself);
 

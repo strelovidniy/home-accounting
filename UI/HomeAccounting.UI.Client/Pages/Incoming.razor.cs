@@ -31,6 +31,8 @@ public partial class Incoming : IDisposable
 
     private string _searchString = string.Empty;
 
+    private UserView _currentUser = null!;
+
     [Inject]
     private IHomeAccountingHttpClient HttpClient { get; set; } = null!;
 
@@ -43,6 +45,9 @@ public partial class Incoming : IDisposable
     [Inject]
     private IIncomingService IncomingService { get; set; } = null!;
 
+    [Inject]
+    private IAuthService AuthService { get; set; } = null!;
+
     public void Dispose()
     {
         Dispose(true);
@@ -51,49 +56,54 @@ public partial class Incoming : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
+        _currentUser = await AuthService.GetCurrentUserAsync(_cts.Token);
+
         _isPageLoading = false;
     }
 
     private async Task AddIncomingDialogAsync()
     {
-        var parameters = new DialogParameters();
+        var parameters = new DialogParameters
+        {
+            { nameof(AddIncomingDialog.CurrentUser), _currentUser }
+        };
 
-        //var dialog = await DialogService.ShowAsync<AddIncomingDialog>("Add Incoming", parameters, _dialogOptions);
+        var dialog = await DialogService.ShowAsync<AddIncomingDialog>("Add Incoming", parameters, _dialogOptions);
 
-        //var result = await dialog.Result;
+        var result = await dialog.Result;
 
-        //if (!result.Canceled)
-        //{
-        //    await _table.ReloadServerData();
-        //    Snackbar.Add("Incoming created successfully.", Severity.Success);
-        //}
+        if (!result.Canceled)
+        {
+            await _table.ReloadServerData();
+            Snackbar.Add("Incoming created successfully.", Severity.Success);
+        }
     }
 
     private async Task UpdateIncomingDialogAsync(IncomingView incoming)
     {
         var parameters = new DialogParameters
         {
-            { "SelectedIncoming", incoming }
+            { nameof(UpdateIncomingDialog.SelectedIncoming), incoming }
         };
 
-        //var dialog = await DialogService.ShowAsync<UpdateIncomingDialog>(
-        //    "Update Incoming",
-        //    parameters,
-        //    new DialogOptions
-        //    {
-        //        CloseButton = true,
-        //        MaxWidth = MaxWidth.ExtraExtraLarge,
-        //        FullWidth = true,
-        //        DisableBackdropClick = true
-        //    });
+        var dialog = await DialogService.ShowAsync<UpdateIncomingDialog>(
+            "Update Incoming",
+            parameters,
+            new DialogOptions
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.ExtraExtraLarge,
+                FullWidth = true,
+                DisableBackdropClick = true
+            });
 
-        //var result = await dialog.Result;
+        var result = await dialog.Result;
 
-        //if (!result.Canceled)
-        //{
-        //    await _table.ReloadServerData();
-        //    Snackbar.Add("Incoming updated successfully.", Severity.Success);
-        //}
+        if (!result.Canceled)
+        {
+            await _table.ReloadServerData();
+            Snackbar.Add("Incoming updated successfully.", Severity.Success);
+        }
     }
 
     private async Task DeleteIncomingAsync(

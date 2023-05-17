@@ -31,6 +31,8 @@ public partial class Spending : IDisposable
 
     private string _searchString = string.Empty;
 
+    private UserView _currentUser = null!;
+
     [Inject]
     private IHomeAccountingHttpClient HttpClient { get; set; } = null!;
 
@@ -43,6 +45,9 @@ public partial class Spending : IDisposable
     [Inject]
     private ISpendingService SpendingService { get; set; } = null!;
 
+    [Inject]
+    private IAuthService AuthService { get; set; } = null!;
+
     public void Dispose()
     {
         Dispose(true);
@@ -51,49 +56,54 @@ public partial class Spending : IDisposable
 
     protected override async Task OnInitializedAsync()
     {
+        _currentUser = await AuthService.GetCurrentUserAsync(_cts.Token);
+
         _isPageLoading = false;
     }
 
     private async Task AddSpendingDialogAsync()
     {
-        var parameters = new DialogParameters();
+        var parameters = new DialogParameters
+        {
+            { nameof(AddSpendingDialog.CurrentUser), _currentUser }
+        };
 
-        //var dialog = await DialogService.ShowAsync<AddSpendingDialog>("Add Spending", parameters, _dialogOptions);
+        var dialog = await DialogService.ShowAsync<AddSpendingDialog>("Add Spending", parameters, _dialogOptions);
 
-        //var result = await dialog.Result;
+        var result = await dialog.Result;
 
-        //if (!result.Canceled)
-        //{
-        //    await _table.ReloadServerData();
-        //    Snackbar.Add("Spending created successfully.", Severity.Success);
-        //}
+        if (!result.Canceled)
+        {
+            await _table.ReloadServerData();
+            Snackbar.Add("Spending created successfully.", Severity.Success);
+        }
     }
 
     private async Task UpdateSpendingDialogAsync(SpendingView spending)
     {
         var parameters = new DialogParameters
         {
-            { "SelectedSpending", spending }
+            { nameof(UpdateSpendingDialog.SelectedSpending), spending }
         };
 
-        //var dialog = await DialogService.ShowAsync<UpdateSpendingDialog>(
-        //    "Update Spending",
-        //    parameters,
-        //    new DialogOptions
-        //    {
-        //        CloseButton = true,
-        //        MaxWidth = MaxWidth.ExtraExtraLarge,
-        //        FullWidth = true,
-        //        DisableBackdropClick = true
-        //    });
+        var dialog = await DialogService.ShowAsync<UpdateSpendingDialog>(
+            "Update Spending",
+            parameters,
+            new DialogOptions
+            {
+                CloseButton = true,
+                MaxWidth = MaxWidth.ExtraExtraLarge,
+                FullWidth = true,
+                DisableBackdropClick = true
+            });
 
-        //var result = await dialog.Result;
+        var result = await dialog.Result;
 
-        //if (!result.Canceled)
-        //{
-        //    await _table.ReloadServerData();
-        //    Snackbar.Add("Spending updated successfully.", Severity.Success);
-        //}
+        if (!result.Canceled)
+        {
+            await _table.ReloadServerData();
+            Snackbar.Add("Spending updated successfully.", Severity.Success);
+        }
     }
 
     private async Task DeleteSpendingAsync(
