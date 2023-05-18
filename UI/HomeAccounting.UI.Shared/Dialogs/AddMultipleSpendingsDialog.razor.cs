@@ -1,18 +1,21 @@
 ﻿using HomeAccounting.Models;
-using HomeAccounting.Models.Create;
 using HomeAccounting.Models.Views;
 using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 using HomeAccounting.UI.Domain.Services.Abstraction;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.JSInterop;
 using MudBlazor;
 
 namespace HomeAccounting.UI.Shared.Dialogs;
 
-public partial class AddSpendingDialog : IDisposable
+public partial class AddMultipleSpendingsDialog : IDisposable
 {
     private readonly CancellationTokenSource _cts = new();
 
-    private readonly CreateSpendingModel _model = new();
+    private readonly List<string> _images = new();
+
+    private List<AddSpendingDialog> _models = new();
 
     private bool _isDialogLoading = true;
 
@@ -20,13 +23,16 @@ public partial class AddSpendingDialog : IDisposable
 
     private bool _processing;
 
-    private MudForm _form = null!;
+    private List<MudForm> _form = null!;
 
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; } = null!;
 
     [Parameter]
     public UserView CurrentUser { get; set; } = null!;
+
+    [Parameter]
+    public List<IBrowserFile> Images { get; set; } = null!;
 
     [Inject]
     private IHomeAccountingHttpClient HttpClient { get; set; } = null!;
@@ -36,6 +42,9 @@ public partial class AddSpendingDialog : IDisposable
 
     [Inject]
     private ISnackbar Snackbar { get; set; } = null!;
+
+    [Inject]
+    private IJSRuntime JsRuntime { get; set; } = null!;
 
     public void Dispose()
     {
@@ -53,64 +62,44 @@ public partial class AddSpendingDialog : IDisposable
         _isSuccessSubmit = false;
     }
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         HttpClient.OnError += OnError;
         HttpClient.OnValidationError += OnValidationError;
 
-        _model.UserId = CurrentUser.Id;
+        foreach (var browserFile in Images)
+        {
+            var bytes = new byte[browserFile.Size];
+
+            var stream = browserFile.OpenReadStream(10 * 1024 * 1024);
+
+            await stream.ReadAsync(bytes);
+
+            _images.Add(Convert.ToBase64String(bytes));
+        }
 
         _isDialogLoading = false;
-
-        return Task.CompletedTask;
     }
 
-    private static string? ValidateAmountField(decimal value) => value <= 0 ? "Amount must be greater than 0" : null;
-
-    private static string? ValidateDescriptionField(string value) =>
-        !string.IsNullOrEmpty(value) && value.Length > 250
-            ? "Description must be less than 250 characters"
-            : null;
-
-    private void OpenCheckScanner()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        MudDialog.Close(DialogResult.Ok(true));
-    }
-
-    private async Task OnSubmitAsync()
-    {
-        _processing = true;
-
-        await _form.Validate();
-
-        if (!_form.IsValid)
+        if (firstRender)
         {
-            _processing = false;
-
-            Snackbar.Add(_form.Errors.FirstOrDefault(), Severity.Error);
-
-            return;
+            await LoadDataAsync();
         }
-
-        await SpendingService.CreateSpendingAsync(_model, _cts.Token);
-
-        if (_isSuccessSubmit)
-        {
-            MudDialog.Close();
-
-            return;
-        }
-
-        _processing = false;
-
-        _isSuccessSubmit = true;
     }
 
-    private void ReleaseUnmanagedResources()
+    private async Task LoadDataAsync()
     {
-        HttpClient.OnError -= OnError;
-        HttpClient.OnValidationError -= OnValidationError;
+        try
+        {
+        }
+        catch
+        {
+            //ignored
+        }
     }
+
 
     private void Dispose(bool disposing)
     {
@@ -123,12 +112,17 @@ public partial class AddSpendingDialog : IDisposable
 
         _cts.Cancel();
         _cts.Dispose();
-        _form.Dispose();
-        MudDialog.Dispose();
-        Snackbar.Dispose();
+        HttpClient.OnError -= OnError;
+        HttpClient.OnValidationError -= OnValidationError;
     }
 
-    ~AddSpendingDialog()
+    private void ReleaseUnmanagedResources()
+    {
+        HttpClient.OnError -= OnError;
+        HttpClient.OnValidationError -= OnValidationError;
+    }
+
+    ~AddMultipleSpendingsDialog()
     {
         Dispose(false);
     }

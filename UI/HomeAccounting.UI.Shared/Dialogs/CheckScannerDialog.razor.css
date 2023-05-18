@@ -1,0 +1,6 @@
+﻿.dragable-area {
+    -ms-transition: 300ms;
+    -o-transition: 300ms;
+    -webkit-transition: 300ms;
+    transition: 300ms;
+}

@@ -6,7 +6,12 @@
 .mud-button-label {
     width: 100%;
     display: inherit;
+    -ms-align-items: inherit;
+    -o-align-items: inherit;
+    -webkit-align-items: inherit;
     align-items: inherit;
+    -o-justify-content: inherit;
+    -webkit-justify-content: inherit;
     justify-content: inherit;
 }
 

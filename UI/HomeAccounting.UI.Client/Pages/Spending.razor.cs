@@ -4,6 +4,7 @@ using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 using HomeAccounting.UI.Domain.Services.Abstraction;
 using HomeAccounting.UI.Shared.Dialogs;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 using OData.QueryBuilder.Builders;
 
@@ -74,6 +75,53 @@ public partial class Spending : IDisposable
 
         if (!result.Canceled)
         {
+            if (result.Data is true)
+            {
+                dialog = await DialogService.ShowAsync<CheckScannerDialog>(
+                    "Check Scanner",
+                    new DialogOptions
+                    {
+                        MaxWidth = MaxWidth.Medium,
+                        FullWidth = true,
+                        CloseButton = true,
+                        DisableBackdropClick = true,
+                        CloseOnEscapeKey = false
+                    }
+                );
+
+                result = await dialog.Result;
+
+                if (!result.Canceled)
+                {
+                    if (result.Data is List<IBrowserFile> images)
+                    {
+                        dialog = await DialogService.ShowAsync<AddMultipleSpendingsDialog>(
+                            "Add Spending From Scanned Check",
+                            new DialogParameters
+                            {
+                                { nameof(AddMultipleSpendingsDialog.Images), images },
+                                { nameof(AddMultipleSpendingsDialog.CurrentUser), _currentUser }
+                            },
+                            new DialogOptions
+                            {
+                                MaxWidth = MaxWidth.ExtraExtraLarge,
+                                FullWidth = true,
+                                CloseButton = true,
+                                DisableBackdropClick = true,
+                                CloseOnEscapeKey = false
+                            }
+                        );
+
+                        result = await dialog.Result;
+
+                        if (result.Canceled)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+
             await _table.ReloadServerData();
             Snackbar.Add("Spending created successfully.", Severity.Success);
         }

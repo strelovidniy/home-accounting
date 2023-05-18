@@ -1,0 +1,46 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using MudBlazor
+
+<MudStack Style="width: 100%">
+    <MudFileUpload T="IReadOnlyList<IBrowserFile>" 
+                   OnFilesChanged="OnInputFileChanged" 
+                   Hidden="false"
+                   Class="flex-1" 
+                   InputClass="absolute mud-width-full mud-height-full overflow-hidden z-20" 
+                   InputStyle="opacity:0"
+                   ondragenter="@SetDragClass" 
+                   ondragleave="@ClearDragClass"
+                   ondragend="@ClearDragClass"
+                   Accept=".jpg,.jpeg,.png">
+        <ButtonTemplate>
+            <MudPaper Height="300px"
+                      Outlined="true" 
+                      Class="@_dragClass">
+                <MudText Typo="Typo.h6">
+                    Drag and drop check photos here or click (Max size is 10MB)
+                </MudText>
+                @foreach (var file in _files.Select(x => x.Name))
+                {
+                    <MudChip Color="Color.Dark" 
+                             Text="@file" />
+                }
+            </MudPaper>
+        </ButtonTemplate>
+    </MudFileUpload>
+    <MudToolBar DisableGutters="true"
+                Class="gap-4"
+                Style="padding-left: 10px">
+        <MudButton OnClick="Upload"
+                   Disabled="@(!_files.Any())"
+                   Color="Color.Primary"
+                   Variant="Variant.Filled">
+            Upload
+        </MudButton>
+        <MudButton OnClick="ClearAsync"
+                   Disabled="@(!_files.Any())"
+                   Color="Color.Error"
+                   Variant="Variant.Filled">
+            Clear
+        </MudButton>
+    </MudToolBar>
+</MudStack>

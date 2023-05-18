@@ -1,0 +1,23 @@
+﻿@using MudBlazor
+
+<MudDialog>
+    <DialogContent>
+        @if (_isDialogLoading)
+        {
+            <div class="loader-container">
+                <MudProgressCircular Color="Color.Primary"
+                                 Style="height: 10%; width: 10%;"
+                                 Indeterminate="true" />
+            </div>
+        }
+        else
+        {
+            @foreach (var image in _images)
+            {
+                <MudImage Src="@("data:image/png;base64, " + image)" 
+                          Width="300"
+                          Height="300"/>
+            }
+        }
+    </DialogContent>
+</MudDialog>
