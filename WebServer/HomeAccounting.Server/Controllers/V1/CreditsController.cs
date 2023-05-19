@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeAccounting.Server.Controllers.V1;
 
-[Route("api/v1/Credits")]
+[Route("api/v1/credits")]
 public class CreditsController : BaseController
 {
     private readonly ICreditService _CreditService;

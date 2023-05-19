@@ -33,5 +33,6 @@ public static class DataDependencyInjectionExtension
         .AddRepository<Spending>()
         .AddRepository<Incoming>()
         .AddRepository<Credit>()
+        .AddRepository<Deposit>()
         .Build();
 }

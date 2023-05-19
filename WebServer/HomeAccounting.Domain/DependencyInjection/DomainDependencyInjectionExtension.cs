@@ -37,8 +37,10 @@ public static class DomainDependencyInjectionExtension
         .AddTransient<IAuthService, AuthService>()
         .AddTransient<ISpendingService, SpendingService>()
         .AddTransient<ICreditService, CreditService>()
+        .AddTransient<IDepositService, DepositService>()
         .AddTransient<IIncomingService, IncomingService>();
 
+    // validators
     private static IServiceCollection AddValidators(
         this IServiceCollection services
     ) => services
@@ -61,6 +63,7 @@ public static class DomainDependencyInjectionExtension
             new IncomingMapperProfile(),
             new SpendingMapperProfile(),
             new CreditMapperProfile(),
+            new DepositMapperProfile(),
         }));
 
     private static IServiceCollection AddSettings(

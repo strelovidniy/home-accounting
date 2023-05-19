@@ -14,6 +14,7 @@ internal class ValidationService : IValidationService
     private readonly IRepository<Spending> _spendingRepository;
     private readonly IRepository<Incoming> _incomingRepository;
     private readonly IRepository<Credit> _creditRepository;
+    private readonly IRepository<Deposit> _depositRepo;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ValidationService(

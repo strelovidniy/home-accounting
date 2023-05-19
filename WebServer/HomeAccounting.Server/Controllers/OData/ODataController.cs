@@ -103,4 +103,26 @@ public class ODataController : ODataControllerBase
             (int)(options.Request.ODataFeature().TotalCount ?? 0)
         ));
     }
+    
+    [HttpGet("deposits")]
+    public IActionResult GetCredits(
+        ODataQueryOptions<Deposit> options,
+        [FromServices] IRepository<Deposit> repository
+    ) 
+    {
+        return Ok(new ODataResponse<DepositView>(
+            options.Context.ToString() ?? string.Empty,
+            _mapper.Map<List<DepositView>>(
+                options
+                    .ApplyTo(
+                        repository
+                            .Query()
+                            .Where(credit => credit.UserId == CurrentUserId)
+                    )
+                    .Cast<Deposit>()
+                    .ToList()
+            ),
+            (int)(options.Request.ODataFeature().TotalCount ?? 0)
+        ));
+    }
 }

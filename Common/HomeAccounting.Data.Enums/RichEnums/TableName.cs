@@ -10,6 +10,7 @@ public class TableName : RichEnum<string>
 
     public static TableName Spendings => new("Spendings");
     public static TableName Credits => new("Credits");
+    public static TableName Deposits => new("Deposits");
 
     private TableName(string value) : base(value)
     {

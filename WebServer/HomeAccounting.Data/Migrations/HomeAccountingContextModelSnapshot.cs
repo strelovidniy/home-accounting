@@ -22,6 +22,38 @@ namespace HomeAccounting.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HomeAccounting.Data.Entities.Credit", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Credits", "dbo");
+                });
+
             modelBuilder.Entity("HomeAccounting.Data.Entities.Incoming", b =>
                 {
                     b.Property<Guid>("Id")
@@ -85,38 +117,6 @@ namespace HomeAccounting.Data.Migrations
 
                     b.ToTable("Spendings", "dbo");
                 });
-            
-            modelBuilder.Entity("HomeAccounting.Data.Entities.Credit", b =>
-            {
-                b.Property<Guid>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("uniqueidentifier")
-                    .HasDefaultValueSql("NEWID()");
-
-                b.Property<decimal>("Amount")
-                    .HasColumnType("decimal(18,2)");
-
-                b.Property<DateTime>("CreatedAt")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("datetime2")
-                    .HasDefaultValueSql("GETUTCDATE()");
-
-                b.Property<string>("Description")
-                    .HasMaxLength(255)
-                    .HasColumnType("nvarchar(255)");
-
-                b.Property<DateTime?>("UpdatedAt")
-                    .HasColumnType("datetime2");
-
-                b.Property<Guid>("UserId")
-                    .HasColumnType("uniqueidentifier");
-
-                b.HasKey("Id");
-
-                b.HasIndex("UserId");
-
-                b.ToTable("Credits", "dbo");
-            });
 
             modelBuilder.Entity("HomeAccounting.Data.Entities.User", b =>
                 {
@@ -188,6 +188,28 @@ namespace HomeAccounting.Data.Migrations
                     b.ToTable("Users", "dbo");
                 });
 
+            modelBuilder.Entity("HomeAccounting.Data.Entities.Credit", b =>
+                {
+                    b.HasOne("HomeAccounting.Data.Entities.User", "User")
+                        .WithMany("Credits")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+            
+            modelBuilder.Entity("HomeAccounting.Data.Entities.Deposit", b =>
+            {
+                b.HasOne("HomeAccounting.Data.Entities.User", "User")
+                    .WithMany("Deposits")
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+
+                b.Navigation("User");
+            });
+
             modelBuilder.Entity("HomeAccounting.Data.Entities.Incoming", b =>
                 {
                     b.HasOne("HomeAccounting.Data.Entities.User", "User")
@@ -210,19 +232,12 @@ namespace HomeAccounting.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("HomeAccounting.Data.Entities.Credit", b =>
-            {
-                b.HasOne("HomeAccounting.Data.Entities.User", "User")
-                    .WithMany("Credits")
-                    .HasForeignKey("UserId")
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .IsRequired();
-
-                b.Navigation("User");
-            });
-            
             modelBuilder.Entity("HomeAccounting.Data.Entities.User", b =>
                 {
+                    b.Navigation("Credits");
+                    
+                    b.Navigation("Deposits");
+
                     b.Navigation("Incomings");
 
                     b.Navigation("Spendings");
