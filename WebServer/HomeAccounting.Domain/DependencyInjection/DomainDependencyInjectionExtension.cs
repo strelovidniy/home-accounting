@@ -37,6 +37,7 @@ public static class DomainDependencyInjectionExtension
         .AddTransient<IAuthService, AuthService>()
         .AddTransient<ISpendingService, SpendingService>()
         .AddTransient<ICreditService, CreditService>()
+        .AddTransient<IDepositService, DepositService>()
         .AddTransient<IIncomingService, IncomingService>()
         .AddSingleton<ICurrencyService, CurrencyService>();
 
