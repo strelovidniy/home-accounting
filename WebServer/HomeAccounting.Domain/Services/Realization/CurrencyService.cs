@@ -12,8 +12,10 @@ internal class CurrencyService : ICurrencyService
     private IEnumerable<CurrencyView> _cachedCurrencies = new List<CurrencyView>();
 
     public CurrencyService(
-        IMapper mapper
-    ) => _mapper = mapper;
+        IMapper mapper)
+    {
+        _mapper = mapper;
+    }
 
     public async Task<IEnumerable<CurrencyView>> GetCurrenciesAsync(
         CancellationToken cancellationToken = default
@@ -45,4 +47,6 @@ internal class CurrencyService : ICurrencyService
 
         return _cachedCurrencies;
     }
+    
+
 }

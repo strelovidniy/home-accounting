@@ -6,6 +6,7 @@ using HomeAccounting.UI.Domain.Settings.Abstraction;
 using HomeAccounting.UI.Domain.Settings.Realization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using IHttpClientFactory = HomeAccounting.UI.Domain.Http.HttpClientFactory.IHttpClientFactory;
 
 namespace HomeAccounting.UI.Domain.DependencyInjection;
 

@@ -1,4 +1,5 @@
-﻿using HomeAccounting.Models;
+﻿using HomeAccounting.Data.Entities;
+using HomeAccounting.Models;
 using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
 using HomeAccounting.Models.Views;
@@ -29,6 +30,11 @@ public interface IUserService
 
     public Task ChangePasswordAsync(
         ChangePasswordModel changePasswordModel,
+        CancellationToken cancellationToken = default
+    );
+
+    Task<User> GetPureUserAsync(
+        Guid id,
         CancellationToken cancellationToken = default
     );
 }

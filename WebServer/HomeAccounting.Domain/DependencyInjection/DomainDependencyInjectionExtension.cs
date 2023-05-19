@@ -28,18 +28,25 @@ public static class DomainDependencyInjectionExtension
 
     private static IServiceCollection AddServices(
         this IServiceCollection services
-    ) => services
-        .AddHttpContextAccessor()
-        .AddTransient<IEmailService, EmailService>()
-        .AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>()
-        .AddTransient<IValidationService, ValidationService>()
-        .AddTransient<IUserService, UserService>()
-        .AddTransient<IAuthService, AuthService>()
-        .AddTransient<ISpendingService, SpendingService>()
-        .AddTransient<ICreditService, CreditService>()
-        .AddTransient<IDepositService, DepositService>()
-        .AddTransient<IIncomingService, IncomingService>()
-        .AddSingleton<ICurrencyService, CurrencyService>();
+    )
+    {
+        services.AddHttpClient<MonoApiClient>().SetHandlerLifetime(TimeSpan.FromMinutes(3));
+
+        services.AddTransient<IMonoApiService>(x=> new MonoApiService(x.GetService<MonoApiClient>(), x.GetService<UserService>()));
+        return services
+                
+            .AddHttpContextAccessor()
+            .AddTransient<IEmailService, EmailService>()
+            .AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>()
+            .AddTransient<IValidationService, ValidationService>()
+            .AddTransient<IUserService, UserService>()
+            .AddTransient<IAuthService, AuthService>()
+            .AddTransient<ISpendingService, SpendingService>()
+            .AddTransient<ICreditService, CreditService>()
+            .AddTransient<IDepositService, DepositService>()
+            .AddTransient<IIncomingService, IncomingService>()
+            .AddSingleton<ICurrencyService, CurrencyService>();
+    }
 
     // validators
     private static IServiceCollection AddValidators(

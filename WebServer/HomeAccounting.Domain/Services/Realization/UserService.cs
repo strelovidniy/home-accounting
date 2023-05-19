@@ -109,6 +109,13 @@ internal class UserService : IUserService
     ) => _mapper.Map<UserView>(await _userRepository
         .Query()
         .FirstOrDefaultAsync(user => user.Id == id, cancellationToken));
+    
+    public async Task<User> GetPureUserAsync(
+        Guid id,
+        CancellationToken cancellationToken = default
+    ) => await _userRepository
+        .Query()
+        .FirstOrDefaultAsync(user => user.Id == id, cancellationToken) ?? new User();
 
     public async Task ChangePasswordAsync(
         ChangePasswordModel changePasswordModel,
