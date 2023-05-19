@@ -19,14 +19,19 @@
         <link href="manifest.json" rel="manifest" />
         <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
         <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png" />
-    </head>
+        <script src='https://unpkg.com/tesseract.js@v2.0.0-alpha.13/dist/tesseract.min.js'></script>
+  </head>
     <body>
         <div id="app">
             <style>
-                span:after { content: var(--blazor-load-percentage-text, "..."); }
+                span:after {
+                    content: var(--blazor-load-percentage-text, "...");
+                }
+
                 span, h1 {
                     color: rgba(255, 255, 255, 0.698);
                 }
+
                 .spinner-border {
                     border-left-color: rgba(255, 255, 255, 0.698);
                     border-bottom-color: rgba(255, 255, 255, 0.698);
@@ -36,10 +41,10 @@
             <iframe src="https://strelovidniy.github.io/home-accounting/anim-bg.html"
                     style="position:fixed;
                            top:0;
-                           left:0; 
-                           bottom:0; 
-                           right:0; 
-                           width:100%; 
+                           left:0;
+                           bottom:0;
+                           right:0;
+                           width:100%;
                            height:100%;
                            border:none;
                            margin:0;
@@ -49,15 +54,15 @@
             <div style="position: absolute; text-align: center; top: 30vh; width: 100%;">
                 <h1>Home Accounting</h1>
                 <div style="-ms-align-items: center;
-                            -o-align-items: center; 
+                            -o-align-items: center;
                             -webkit-align-items: center;
-                            align-items: center; 
+                            align-items: center;
                             display: flex;
                             gap: 10px;
-                            -o-justify-content: center; 
+                            -o-justify-content: center;
                             -webkit-justify-content: center;
                             justify-content: center;">
-                    <div class="spinner-border" 
+                    <div class="spinner-border"
                          role="status"></div>
                     <span>
                         The application is loading &nbsp;
@@ -74,6 +79,8 @@
         <script src="_content/MudBlazor/MudBlazor.min.js"></script>
         <script src="_content/Chronos.Blazor.Cropper/CropHelper.js"></script>
         <script src="./js/chart-fixer.js"></script>
+        <script src="./js/ai-scanner.js"></script>
+        <script src="./js/tesseract-ocr.js"></script>
         <script>navigator.serviceWorker.register('service-worker.js');</script>
     </body>
 </html>

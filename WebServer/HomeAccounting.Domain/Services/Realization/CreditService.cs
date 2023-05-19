@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using EntityFrameworkCore.RepositoryInfrastructure;
 using HomeAccounting.Data.Entities;
-using HomeAccounting.Data.Enums;
-using HomeAccounting.Domain.Extensions;
 using HomeAccounting.Domain.Services.Abstraction;
-using HomeAccounting.Domain.Validators.Runtime;
 using HomeAccounting.Models.Create;
 using HomeAccounting.Models.Update;
-using HomeAccounting.Models.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,12 +16,12 @@ internal class CreditService : ICreditService
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public CreditService(
-        IRepository<Credit> CreditRepository,
+        IRepository<Credit> creditRepository,
         IMapper mapper,
         IHttpContextAccessor httpContextAccessor
     )
     {
-        _creditRepository = CreditRepository;
+        _creditRepository = creditRepository;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
     }
@@ -66,19 +62,18 @@ internal class CreditService : ICreditService
     }
 
     public async Task DeleteCreditAsync(
-        Guid CreditId,
+        Guid creditId,
         CancellationToken cancellationToken = default
     )
     {
-        var Credit = await _creditRepository
+        var credit = await _creditRepository
             .Query()
             .FirstOrDefaultAsync(
-                x => x.Id == CreditId,
+                x => x.Id == creditId,
                 cancellationToken
             );
-        
 
-        _creditRepository.Delete(Credit!);
+        _creditRepository.Delete(credit!);
 
         await _creditRepository.SaveChangesAsync(cancellationToken);
     }

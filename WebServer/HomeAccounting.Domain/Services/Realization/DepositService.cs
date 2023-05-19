@@ -11,17 +11,17 @@ namespace HomeAccounting.Domain.Services.Realization;
 
 internal class DepositService : IDepositService
 {
-    private readonly IRepository<Deposit> _DepositRepository;
+    private readonly IRepository<Deposit> _depositRepository;
     private readonly IMapper _mapper;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public DepositService(
-        IRepository<Deposit> DepositRepository,
+        IRepository<Deposit> depositRepository,
         IMapper mapper,
         IHttpContextAccessor httpContextAccessor
     )
     {
-        _DepositRepository = DepositRepository;
+        _depositRepository = depositRepository;
         _mapper = mapper;
         _httpContextAccessor = httpContextAccessor;
     }
@@ -31,13 +31,13 @@ internal class DepositService : IDepositService
         CancellationToken cancellationToken = default
     )
     {
-        await _DepositRepository
+        await _depositRepository
             .AddAsync(
                 _mapper.Map<Deposit>(model),
                 cancellationToken
             );
 
-        await _DepositRepository.SaveChangesAsync(cancellationToken);
+        await _depositRepository.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateDepositAsync(
@@ -45,65 +45,50 @@ internal class DepositService : IDepositService
         CancellationToken cancellationToken = default
     )
     {
-        var Deposit = await _DepositRepository
+        var deposit = await _depositRepository
             .Query()
             .FirstOrDefaultAsync(
                 x => x.Id == model.DepositId,
                 cancellationToken
             );
 
-        if (model.Description != Deposit!.Description)
+        if (model.Description != deposit!.Description)
         {
-            Deposit.Description = model.Description;
-            Deposit.UpdatedAt = DateTime.UtcNow;
+            deposit.Description = model.Description;
+            deposit.UpdatedAt = DateTime.UtcNow;
         }
 
-        await _DepositRepository.SaveChangesAsync(cancellationToken);
+        await _depositRepository.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteDepositAsync(
-        Guid DepositId,
+        Guid depositId,
         CancellationToken cancellationToken = default
     )
     {
-        var Deposit = await _DepositRepository
+        var deposit = await _depositRepository
             .Query()
             .FirstOrDefaultAsync(
-                x => x.Id == DepositId,
+                x => x.Id == depositId,
                 cancellationToken
             );
-        
 
-        _DepositRepository.Delete(Deposit!);
+        _depositRepository.Delete(deposit!);
 
-        await _DepositRepository.SaveChangesAsync(cancellationToken);
+        await _depositRepository.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<decimal> GetCompoundInterestAsync(Guid depositId, CancellationToken cancellationToken = default)
-    {
-        var depositModel = await GetDepositAsync(depositId, cancellationToken);
-        
-        if (depositModel?.CompoundingFrequency == 0)
-        {
-            throw new ArgumentException();
-        }
-        
-        return depositModel.Amount * (decimal)Math.Pow((1 + depositModel.RateOfInterest / depositModel.CompoundingFrequency),
-            (depositModel.CompoundingFrequency * depositModel.NumberOfYears));
-    }
-    
     private async Task<Deposit?> GetDepositAsync(
         Guid depositId,
         CancellationToken cancellationToken = default
     )
     {
-        return await _DepositRepository
+        return await _depositRepository
             .Query()
             .Include(x => x.User)
             .FirstOrDefaultAsync(
                 x => x.Id == depositId,
                 cancellationToken
             );
-
     }
 }

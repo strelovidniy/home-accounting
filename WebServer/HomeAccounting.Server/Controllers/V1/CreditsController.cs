@@ -9,20 +9,20 @@ namespace HomeAccounting.Server.Controllers.V1;
 [Route("api/v1/credits")]
 public class CreditsController : BaseController
 {
-    private readonly ICreditService _CreditService;
+    private readonly ICreditService _creditService;
 
     public CreditsController(
         IServiceProvider services,
-        ICreditService CreditService
-    ) : base(services) => _CreditService = CreditService;
-    
+        ICreditService creditService
+    ) : base(services) => _creditService = creditService;
+
     [HttpPost]
     public async Task<IActionResult> CreateCreditAsync(
         [FromBody] CreateCreditModel createCreditModel,
         CancellationToken cancellationToken
     )
     {
-        await _CreditService.CreateCreditAsync(createCreditModel, cancellationToken);
+        await _creditService.CreateCreditAsync(createCreditModel, cancellationToken);
 
         return Ok();
     }
@@ -33,7 +33,7 @@ public class CreditsController : BaseController
         CancellationToken cancellationToken
     )
     {
-        await _CreditService.UpdateCreditAsync(
+        await _creditService.UpdateCreditAsync(
             updateCreditModel, cancellationToken);
 
         return Ok();
@@ -41,11 +41,11 @@ public class CreditsController : BaseController
 
     [HttpDelete]
     public async Task<IActionResult> DeleteCreditAsync(
-        [FromQuery] Guid CreditId,
+        [FromQuery] Guid creditId,
         CancellationToken cancellationToken
     )
     {
-        await _CreditService.DeleteCreditAsync(CreditId, cancellationToken);
+        await _creditService.DeleteCreditAsync(creditId, cancellationToken);
 
         return Ok();
     }

@@ -16,7 +16,7 @@ public interface ICreditService
     );
 
     public Task DeleteCreditAsync(
-        Guid CreditId,
+        Guid creditId,
         CancellationToken cancellationToken = default
     );
 }

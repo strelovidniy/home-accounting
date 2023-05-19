@@ -10,31 +10,31 @@ public class DepositConfiguration : IEntityTypeConfiguration<Deposit>
     public void Configure(EntityTypeBuilder<Deposit> builder)
     {
         builder
-            .HasKey(Deposit => Deposit.Id);
+            .HasKey(deposit => deposit.Id);
 
         builder
             .ToTable(TableName.Deposits, TableSchema.Dbo);
 
         builder
-            .Property(Deposit => Deposit.Id)
+            .Property(deposit => deposit.Id)
             .HasDefaultValueSql(DefaultSqlValue.NewGuid)
             .IsRequired();
 
         builder
-            .Property(Deposit => Deposit.CreatedAt)
+            .Property(deposit => deposit.CreatedAt)
             .HasDefaultValueSql(DefaultSqlValue.NowUtc)
             .IsRequired();
 
         builder
-            .Property(Deposit => Deposit.UpdatedAt)
+            .Property(deposit => deposit.UpdatedAt)
             .IsRequired(false);
 
         builder
-            .Property(Deposit => Deposit.Amount)
+            .Property(deposit => deposit.Amount)
             .IsRequired();
 
         builder
-            .Property(Deposit => Deposit.Description)
+            .Property(deposit => deposit.Description)
             .HasMaxLength(255)
             .IsRequired(false);
     }

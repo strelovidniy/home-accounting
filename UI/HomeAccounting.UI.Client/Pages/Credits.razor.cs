@@ -79,11 +79,11 @@ public partial class Credits : IDisposable
         }
     }
 
-    private async Task UpdateCreditDialogAsync(CreditView Credit)
+    private async Task UpdateCreditDialogAsync(CreditView credit)
     {
         var parameters = new DialogParameters
         {
-            { nameof(UpdateCreditDialog.SelectedCredit), Credit }
+            { nameof(UpdateCreditDialog.SelectedCredit), credit }
         };
 
         var dialog = await DialogService.ShowAsync<UpdateCreditDialog>(
@@ -163,7 +163,7 @@ public partial class Credits : IDisposable
             .ByList()
             .Top(state.PageSize)
             .Skip(state.PageSize * state.Page);
-        
+
         builder = state.SortDirection switch
         {
             SortDirection.None => builder,
@@ -185,7 +185,7 @@ public partial class Credits : IDisposable
             },
             _ => builder
         };
-        
+
         if (!string.IsNullOrWhiteSpace(_searchString))
         {
             builder = builder.Filter(

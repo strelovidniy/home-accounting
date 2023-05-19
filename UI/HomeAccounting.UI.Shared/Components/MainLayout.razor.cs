@@ -31,7 +31,7 @@ public partial class MainLayout : IDisposable
 
     private IEnumerable<CurrencyView> _currencies = new List<CurrencyView>();
 
-    private bool _isAuth => NavManager.Uri.Contains("/auth/");
+    private bool IsAuth => NavManager.Uri.Contains("/auth/");
 
     [Inject]
     private ISnackbar Snackbar { get; set; } = null!;
@@ -107,7 +107,7 @@ public partial class MainLayout : IDisposable
     {
         Init();
 
-        if (_isAuth)
+        if (IsAuth)
         {
             _inited = true;
 
