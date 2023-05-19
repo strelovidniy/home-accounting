@@ -1,10 +1,10 @@
 ﻿using System.Net;
 using System.Text;
 using HomeAccounting.Models;
-using HomeAccounting.UI.Domain.Http.HttpClientFactory;
 using HomeAccounting.UI.Domain.Models;
 using Newtonsoft.Json;
 using OData.QueryBuilder.Conventions.AddressingEntities.Query;
+using IHttpClientFactory = HomeAccounting.UI.Domain.Http.HttpClientFactory.IHttpClientFactory;
 
 namespace HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
 
