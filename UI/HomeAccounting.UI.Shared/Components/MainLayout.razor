@@ -25,12 +25,35 @@ else
                        Edge="Edge.Start"
                        Icon="@Icons.Material.Filled.Menu"
                        OnClick="@(() => _drawerOpen = !_drawerOpen)"/>
-        <MudSpacer/>
-        <MudDivider
-            Vertical="true"
-            FlexItem="true"
-            DividerType="DividerType.Middle"
-            Class="mx-4 my-5"/>
+        
+        <div class="currencies-container">
+            <MudCarousel Class="mud-width-full"
+                         ShowArrows="true"
+                         ShowBullets="false"
+                         EnableSwipeGesture="true"
+                         AutoCycle="true"
+                         TData="object">
+                @foreach (var currency in _currencies)
+                {
+                    <MudCarouselItem Transition="Transition.Slide"
+                                     Color="@Color.Transparent">
+                        <div class="d-flex align-items-center justify-content-center flex-row"
+                             style="height: 100%">
+                            <MudText>
+                                @currency.CurrencyA &nbsp;
+                            </MudText>
+                            <MudText>
+                                @currency.RateBuy / @currency.RateSell
+                            </MudText>
+                        </div>
+                    </MudCarouselItem>
+                }
+            </MudCarousel>
+        </div>
+        
+            <MudSpacer />
+
+        <MudDivider Vertical="true"/>
 
         <MudMenu Direction="Direction.Left"
                  OffsetX="true"

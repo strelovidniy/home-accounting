@@ -116,3 +116,11 @@ main {
     font-weight: 600;
     white-space: nowrap;
 }
+
+.currencies-container {
+    display: flex;
+    width: fit-content;
+    height: 64px;
+    max-width: 300px;
+    width: 100%
+}
