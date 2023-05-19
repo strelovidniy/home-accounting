@@ -49,4 +49,14 @@ public class DepositsController : BaseController
 
         return Ok();
     }
+    
+    [HttpGet]
+    [Route("{depositId}")]
+    public async Task<IActionResult> GetCompoundInterestAsync(
+        [FromQuery] Guid depositId,
+        CancellationToken cancellationToken
+    )
+    {
+        return Ok(await _depositService.GetCompoundInterestAsync(depositId, cancellationToken));
+    }
 }

@@ -19,4 +19,6 @@ public interface IDepositService
         Guid DepositId,
         CancellationToken cancellationToken = default
     );
+
+    Task<decimal> GetCompoundInterestAsync(Guid depositId, CancellationToken cancellationToken = default);
 }

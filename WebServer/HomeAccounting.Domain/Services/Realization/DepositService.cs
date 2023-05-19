@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using EntityFrameworkCore.RepositoryInfrastructure;
 using HomeAccounting.Data.Entities;
-using HomeAccounting.Data.Enums;
-using HomeAccounting.Domain.Extensions;
 using HomeAccounting.Domain.Services.Abstraction;
-using HomeAccounting.Domain.Validators.Runtime;
 using HomeAccounting.Models.Create;
 using HomeAccounting.Models.Update;
-using HomeAccounting.Models.Views;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -81,5 +77,33 @@ internal class DepositService : IDepositService
         _DepositRepository.Delete(Deposit!);
 
         await _DepositRepository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<decimal> GetCompoundInterestAsync(Guid depositId, CancellationToken cancellationToken = default)
+    {
+        var depositModel = await GetDepositAsync(depositId, cancellationToken);
+        
+        if (depositModel?.CompoundingFrequency == 0)
+        {
+            throw new ArgumentException();
+        }
+        
+        return depositModel.Amount * (decimal)Math.Pow((1 + depositModel.RateOfInterest / depositModel.CompoundingFrequency),
+            (depositModel.CompoundingFrequency * depositModel.NumberOfYears));
+    }
+    
+    private async Task<Deposit?> GetDepositAsync(
+        Guid depositId,
+        CancellationToken cancellationToken = default
+    )
+    {
+        return await _DepositRepository
+            .Query()
+            .Include(x => x.User)
+            .FirstOrDefaultAsync(
+                x => x.Id == depositId,
+                cancellationToken
+            );
+
     }
 }
