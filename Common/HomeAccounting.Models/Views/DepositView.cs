@@ -11,10 +11,10 @@ public class DepositView
     public DateTime DepositDate { get; set; }
 
     public DateTime? DepositUpdatedAt { get; set; }
-    
+
     public int DepositRateOfInterest { get; set; } // in percentage
-    public int DepositNumberOfYears { get; set; } 
-    public int DepositCompoundingFrequency { get; set; } 
+
+    public int DepositNumberOfYears { get; set; }
 
     public UserView? User { get; set; }
 }

@@ -13,9 +13,9 @@ public class DepositsController : BaseController
 
     public DepositsController(
         IServiceProvider services,
-        IDepositService DepositService
-    ) : base(services) => _depositService = DepositService;
-    
+        IDepositService depositService
+    ) : base(services) => _depositService = depositService;
+
     [HttpPost]
     public async Task<IActionResult> CreateDepositAsync(
         [FromBody] CreateDepositModel createDepositModel,
@@ -41,22 +41,12 @@ public class DepositsController : BaseController
 
     [HttpDelete]
     public async Task<IActionResult> DeleteDepositAsync(
-        [FromQuery] Guid DepositId,
-        CancellationToken cancellationToken
-    )
-    {
-        await _depositService.DeleteDepositAsync(DepositId, cancellationToken);
-
-        return Ok();
-    }
-    
-    [HttpGet]
-    [Route("{depositId}")]
-    public async Task<IActionResult> GetCompoundInterestAsync(
         [FromQuery] Guid depositId,
         CancellationToken cancellationToken
     )
     {
-        return Ok(await _depositService.GetCompoundInterestAsync(depositId, cancellationToken));
+        await _depositService.DeleteDepositAsync(depositId, cancellationToken);
+
+        return Ok();
     }
 }

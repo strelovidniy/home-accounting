@@ -3,6 +3,7 @@
 @using HomeAccounting.Models.Views
 @using Microsoft.AspNetCore.Components.Web
 @using MudBlazor
+@using BlazorPro.Spinkit
 
 <PageTitle>
     Deposits
@@ -91,11 +92,12 @@ else
                 <MudTd DataLabel="DepositRateOfInterest">
                     @context.DepositRateOfInterest
                 </MudTd>
-                <MudTd DataLabel="DepositCompoundingFrequency">
-                    @context.DepositCompoundingFrequency
-                </MudTd>
                 <MudTd DataLabel="DepositNumberOfYears">
                     @context.DepositNumberOfYears
+                </MudTd>
+                <MudTd DataLabel="TotalAmount">
+                    @((context.Amount * (decimal)Math.Pow(1 + (double)context.DepositRateOfInterest / 100,
+                        context.DepositNumberOfYears)).ToString("N2"))
                 </MudTd>
                 <MudTd DataLabel="DepositDate">
                     @context.DepositDate
@@ -141,16 +143,13 @@ else
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel SortLabel="DepositCompoundingFrequency"
-                                       T="DepositView">
-                        Deposit Compounding Frequency
-                    </MudTableSortLabel>
-                </MudTh>
-                <MudTh>
                     <MudTableSortLabel SortLabel="DepositNumberOfYears"
                                        T="DepositView">
                         Number of Years
                     </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    Total Amount
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel SortLabel="DepositDate"

@@ -27,7 +27,7 @@ public partial class Deposits : IDisposable
 
     private bool _isLoading;
 
-    private List<DepositView> _Deposits = new();
+    private List<DepositView> _deposits = new();
 
     private string _searchString = string.Empty;
 
@@ -79,11 +79,11 @@ public partial class Deposits : IDisposable
         }
     }
 
-    private async Task UpdateDepositDialogAsync(DepositView Deposit)
+    private async Task UpdateDepositDialogAsync(DepositView deposit)
     {
         var parameters = new DialogParameters
         {
-            { nameof(UpdateDepositDialog.SelectedDeposit), Deposit }
+            { nameof(UpdateDepositDialog.SelectedDeposit), deposit }
         };
 
         var dialog = await DialogService.ShowAsync<UpdateDepositDialog>(
@@ -107,7 +107,7 @@ public partial class Deposits : IDisposable
     }
 
     private async Task DeleteDepositAsync(
-        DepositView Deposit,
+        DepositView deposit,
         CancellationToken cancellationToken = default
     )
     {
@@ -136,7 +136,7 @@ public partial class Deposits : IDisposable
             HttpClient.OnError += OnError;
             HttpClient.OnValidationError += OnValidationError;
 
-            await DepositService.DeleteDepositAsync(Deposit.Id, cancellationToken);
+            await DepositService.DeleteDepositAsync(deposit.Id, cancellationToken);
 
             if (!isSuccess)
             {
@@ -163,7 +163,7 @@ public partial class Deposits : IDisposable
             .ByList()
             .Top(state.PageSize)
             .Skip(state.PageSize * state.Page);
-        
+
         builder = state.SortDirection switch
         {
             SortDirection.None => builder,
@@ -185,7 +185,7 @@ public partial class Deposits : IDisposable
             },
             _ => builder
         };
-        
+
         if (!string.IsNullOrWhiteSpace(_searchString))
         {
             builder = builder.Filter(
@@ -195,13 +195,13 @@ public partial class Deposits : IDisposable
 
         var oDataResult = await HttpClient.GetFromOdataAsync(builder);
 
-        _Deposits = oDataResult?.Value ?? _Deposits;
+        _deposits = oDataResult?.Value ?? _deposits;
 
         _isLoading = false;
 
         return new TableData<DepositView>
         {
-            Items = _Deposits,
+            Items = _deposits,
             TotalItems = oDataResult?.Count ?? 0
         };
     }

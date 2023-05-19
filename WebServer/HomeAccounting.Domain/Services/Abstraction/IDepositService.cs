@@ -16,9 +16,7 @@ public interface IDepositService
     );
 
     public Task DeleteDepositAsync(
-        Guid DepositId,
+        Guid depositId,
         CancellationToken cancellationToken = default
     );
-
-    Task<decimal> GetCompoundInterestAsync(Guid depositId, CancellationToken cancellationToken = default);
 }

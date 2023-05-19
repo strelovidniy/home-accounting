@@ -12,12 +12,33 @@
         }
         else
         {
-            @foreach (var image in _images)
-            {
-                <MudImage Src="@("data:image/png;base64, " + image)" 
-                          Width="300"
-                          Height="300"/>
-            }
+            <MudGrid>
+                <MudItem xs="12"
+                         md="6">
+                    <MudGrid>
+                        @foreach (var image in _images)
+                        {
+                            <MudItem xs="12">
+                                <MudImage Src="@("data:image/png;base64, " + image)"
+                                          Width="300"
+                                          Height="300"
+                                          ObjectFit="ObjectFit.Contain"/>
+                            </MudItem>
+
+                        }
+                    </MudGrid>
+                </MudItem>
+                
+
+                <MudItem xs="12"
+                         md="6">
+                    <MudText Style="font-size: 2rem">
+                        The AI powered check scanner coming soon...
+                    </MudText>
+                </MudItem>
+
+            </MudGrid>
+            
         }
     </DialogContent>
 </MudDialog>

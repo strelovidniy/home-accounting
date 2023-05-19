@@ -100,6 +100,10 @@ public partial class AddMultipleSpendingsDialog : IDisposable
         }
     }
 
+    private async Task TestJsAsync()
+    {
+        await JsRuntime.InvokeAsync<dynamic>("testTesseract");
+    }
 
     private void Dispose(bool disposing)
     {

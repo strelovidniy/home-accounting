@@ -15,7 +15,6 @@ internal class CreateDepositModelToDepositConverter : ITypeConverter<CreateDepos
         Description = createDepositModel.Description,
         RateOfInterest = createDepositModel.RateOfInterest,
         NumberOfYears = createDepositModel.NumberOfYears,
-        CompoundingFrequency = createDepositModel.CompoundingFrequency,
         UserId = createDepositModel.UserId
     };
 }
