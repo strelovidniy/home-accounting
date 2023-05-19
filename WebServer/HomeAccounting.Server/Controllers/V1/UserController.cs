@@ -73,4 +73,34 @@ public class UserController : BaseController
 
         return Ok();
     }
+
+    [HttpPost("change-avatar")]
+    public async Task<IActionResult> ChangeAvatarAsync(
+        [FromForm] IFormFile avatar,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await _userService.ChangeAvatarAsync(avatar, cancellationToken);
+
+        return Ok();
+    }
+
+    [HttpGet("avatars/{imageName}")]
+    public async Task<IActionResult> GetAvatarAsync(
+        string imageName,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var avatar = await System.IO.File.ReadAllBytesAsync(
+            Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "Files",
+                "Avatars",
+                imageName
+            ),
+            cancellationToken
+        );
+
+        return File(avatar, $"image/{imageName.Split('.').Last()}");
+    }
 }

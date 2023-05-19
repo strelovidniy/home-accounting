@@ -2,6 +2,7 @@
 using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
 using HomeAccounting.Models.Views;
+using Microsoft.AspNetCore.Http;
 
 namespace HomeAccounting.Domain.Services.Abstraction;
 
@@ -29,6 +30,11 @@ public interface IUserService
 
     public Task ChangePasswordAsync(
         ChangePasswordModel changePasswordModel,
+        CancellationToken cancellationToken = default
+    );
+
+    public Task ChangeAvatarAsync(
+        IFormFile avatar,
         CancellationToken cancellationToken = default
     );
 }

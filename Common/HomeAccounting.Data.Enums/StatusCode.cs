@@ -42,9 +42,10 @@ public enum StatusCode
     PasswordMustHaveAtLeastOneDigit = 1205,
     AmountMustBeGreaterThanZero = 1206,
 
-    InvalidEmailFormat = 1308,
-    InvalidEmailModel = 1309,
-    InvalidVerificationCode = 1310,
+    InvalidEmailFormat = 1301,
+    InvalidEmailModel = 1302,
+    InvalidVerificationCode = 1303,
+    InvalidFileExtension = 1304,
 
     FirstNameShouldNotContainWhiteSpace = 1401,
     LastNameShouldNotContainWhiteSpace = 1402,

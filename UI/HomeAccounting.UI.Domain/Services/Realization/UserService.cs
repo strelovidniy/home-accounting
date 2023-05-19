@@ -47,15 +47,23 @@ internal class UserService : IUserService
     public Task ChangeAvatarAsync(
         byte[] bytes,
         CancellationToken cancellationToken = default
-    ) => _httpClient
-        .PostAsync(
-            "api/v1/users/change-avatar",
-            new MultipartFormDataContent
-            {
-                new ByteArrayContent(bytes)
-            },
-            cancellationToken
-        );
+    )
+    {
+        using var multipartFormDataContent = new MultipartFormDataContent();
+
+        var stream = new MemoryStream();
+
+        stream.Write(bytes, 0, bytes.Length);
+
+        multipartFormDataContent.Add(new StreamContent(stream), "avatar");
+
+        return _httpClient
+            .PostAsync(
+                "api/v1/users/change-avatar",
+                multipartFormDataContent,
+                cancellationToken
+            );
+    }
 
     public Task<string?> GetMonobankTokenAsync(
         CancellationToken cancellationToken = default

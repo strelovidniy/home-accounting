@@ -134,4 +134,43 @@ internal class UserService : IUserService
 
         await _userRepository.SaveChangesAsync(cancellationToken);
     }
+
+    public async Task ChangeAvatarAsync(
+        IFormFile avatar,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var currentUser = _userRepository
+            .Query()
+            .FirstOrDefault(user => user.Id == _httpContextAccessor.GetCurrentUserId());
+
+        RuntimeValidator.Assert(currentUser is not null, StatusCode.Unauthorized);
+
+        var fileExtension = Path.GetExtension(avatar.FileName);
+
+        RuntimeValidator.Assert(
+            fileExtension is not null and not "",
+            StatusCode.InvalidFileExtension
+        );
+
+        if (!fileExtension!.StartsWith("."))
+        {
+            fileExtension = "." + fileExtension;
+        }
+
+        var fileName = $"{currentUser!.Id}{fileExtension}";
+
+        var filePath = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "Files",
+            "Avatars",
+            fileName
+        );
+
+        await using var fileStream = new FileStream(filePath, FileMode.Create);
+
+        await avatar.CopyToAsync(fileStream, cancellationToken);
+
+        currentUser.ImageDataUrl = _urlSettings.WebApiUrl + "api/v1/users/avatars/" + fileName;
+    }
 }
