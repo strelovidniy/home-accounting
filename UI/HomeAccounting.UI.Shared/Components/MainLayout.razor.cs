@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using HomeAccounting.Data.Enums;
 using HomeAccounting.Models;
 using HomeAccounting.Models.Views;
 using HomeAccounting.UI.Domain.Http.HomeAccountingHttpClient;
@@ -10,6 +11,8 @@ namespace HomeAccounting.UI.Shared.Components;
 
 public partial class MainLayout : IDisposable
 {
+    private readonly CancellationTokenSource _cts = new();
+
     private UserView? _currentUser;
 
     private bool _drawerOpen = true;
@@ -25,6 +28,8 @@ public partial class MainLayout : IDisposable
     private char? _firstLetterOfName;
 
     private string? _fullName;
+
+    private IEnumerable<CurrencyView> _currencies = new List<CurrencyView>();
 
     private bool _isAuth => NavManager.Uri.Contains("/auth/");
 
@@ -42,6 +47,9 @@ public partial class MainLayout : IDisposable
 
     [Inject]
     private ILocalStorageService LocalStorageService { get; set; } = null!;
+
+    [Inject]
+    private ICurrencyService CurrencyService { get; set; } = null!;
 
     public void Dispose()
     {
@@ -105,6 +113,11 @@ public partial class MainLayout : IDisposable
 
             return;
         }
+
+        _currencies = (await CurrencyService.GetCurrenciesAsync(_cts.Token) ?? new List<CurrencyView>())
+            .Where(x => x.CurrencyB == CurrencyCode.UAH.ToString()
+                && (x.CurrencyA == CurrencyCode.USD.ToString()
+                    || x.CurrencyA == CurrencyCode.EUR.ToString()));
 
         _currentUser = await AuthService.GetCurrentUserAsync();
 
@@ -194,10 +207,15 @@ public partial class MainLayout : IDisposable
     {
         ReleaseUnmanagedResources();
 
-        if (disposing)
+        if (!disposing)
         {
-            Snackbar.Dispose();
+            return;
         }
+
+        _cts.Cancel();
+        _cts.Dispose();
+        Snackbar.Dispose();
+        _mudThemeProvider.Dispose();
     }
 
     ~MainLayout()
