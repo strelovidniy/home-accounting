@@ -13,6 +13,7 @@ internal class HomeAccountingContext : DbContext
     public virtual DbSet<Spending> Spendings { get; set; } = null!;
 
     public virtual DbSet<Incoming> Incomings { get; set; } = null!;
+    public virtual DbSet<Credit> Credits { get; set; } = null!;
 
     public HomeAccountingContext(DbContextOptions<HomeAccountingContext> options)
         : base(options)
@@ -28,6 +29,7 @@ internal class HomeAccountingContext : DbContext
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new SpendingConfiguration());
         modelBuilder.ApplyConfiguration(new IncomingConfiguration());
+        modelBuilder.ApplyConfiguration(new CreditConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

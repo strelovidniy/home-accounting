@@ -1,10 +1,11 @@
 ﻿@page "/credits"
 
+@using HomeAccounting.Models.Views
 @using Microsoft.AspNetCore.Components.Web
 @using MudBlazor
 
 <PageTitle>
-    Credits
+    Incoming
 </PageTitle>
 
 @if (_isPageLoading)
@@ -22,7 +23,125 @@ else
               Class="border">
         <MudText Typo="Typo.h6"
                  Class="px-4 py-2">
-            Credits
+            Incoming
         </MudText>
+        <MudTable @ref="_table"
+                  Dense="@false"
+                  Elevation="0"
+                  Hover="@true"
+                  ServerData="@ServerReloadAsync"
+                  FixedHeader="true"
+                  FixedFooter="true"
+                  Height="calc(100vh - 340px)">
+            <ToolBarContent>
+                <div class="justify-center mud-text-align-center px-1 no-nested-margin">
+                    <MudButton OnClick="@AddCreditsDialogAsync"
+                               StartIcon="@Icons.Material.Filled.PersonAdd"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Class="mr-2 mb-2">
+                        Add Incoming
+                    </MudButton>
+                </div>
+                <SpinLoader IsLoading="_isLoading" 
+                            Spinner="SpinnerType.Wave" 
+                            Class="ml-2"/>
+                <MudSpacer/>
+                <MudTextField T="string"
+                              Value="_searchString"
+                              ValueChanged="async value => { _searchString = value; await _table.ReloadServerData(); }"
+                              Placeholder="Search"
+                              Variant="@Variant.Outlined"
+                              Adornment="Adornment.Start"
+                              AdornmentIcon="@Icons.Material.Filled.Search"
+                              Margin="@Margin.Dense"
+                              IconSize="Size.Medium"
+                              Class="mt-0">
+                </MudTextField>
+                <SpinLoader IsLoading="_isLoading"
+                            Spinner="SpinnerType.Wave"/>
+            </ToolBarContent>
+
+            <RowTemplate>
+                <MudTd DataLabel="Actions"
+                       Style="text-align: left">
+                    <MudMenu Label="Actions"
+                             Variant="Variant.Filled"
+                             DisableElevation="true"
+                             EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                             IconColor="Color.Secondary"
+                             Direction="Direction.Left"
+                             OffsetX="true">
+                        <MudMenuItem OnClick="@(async () => { await UpdateCreditDialogAsync(context); })"
+                                     OnTouch="@(async () => { await UpdateCreditDialogAsync(context); })">
+                            Update
+                        </MudMenuItem>
+                        <MudMenuItem OnClick="@(async () => { await DeleteCreditAsync(context); })"
+                                     OnTouch="@(async () => { await DeleteCreditAsync(context); })">
+                            Delete
+                        </MudMenuItem>
+                    </MudMenu>
+                </MudTd>
+                <MudTd DataLabel="Amount">
+                    @context.Amount
+                </MudTd>
+                <MudTd DataLabel="Description">
+                    @context.Description
+                </MudTd>
+                <MudTd DataLabel="IncomingDate">
+                    @context.CreditDate
+                </MudTd>
+                <MudTd DataLabel="IncomingUpdatedAt">
+                    @context.CreditUpdatedAt
+                </MudTd>
+            </RowTemplate>
+
+            <NoRecordsContent>
+                <MudText>
+                    No records found.
+                </MudText>
+            </NoRecordsContent>
+
+            <LoadingContent>
+                <MudText>
+                    Loading...
+                </MudText>
+            </LoadingContent>
+
+            <HeaderContent>
+                <MudTh>
+                    Action
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="Amount"
+                                       T="IncomingView">
+                        Amount
+                    </MudTableSortLabel>
+
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="Description"
+                                       T="IncomingView">
+                        Description
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="IncomingDate"
+                                       T="IncomingView">
+                        Incoming Date
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="IncomingUpdatedAt"
+                                       T="IncomingView">
+                        Incoming Updated At
+                    </MudTableSortLabel>
+                </MudTh>
+            </HeaderContent>
+
+            <PagerContent>
+                <MudTablePager/>
+            </PagerContent>
+        </MudTable>
     </MudPaper>
 }

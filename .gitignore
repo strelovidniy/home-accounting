@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /WebServer/HomeAccounting.Server/appsettings.Staging.json
 /WebServer/HomeAccounting.Server/appsettings.Development.json
+.idea

@@ -36,6 +36,7 @@ public static class DomainDependencyInjectionExtension
         .AddTransient<IUserService, UserService>()
         .AddTransient<IAuthService, AuthService>()
         .AddTransient<ISpendingService, SpendingService>()
+        .AddTransient<ICreditService, CreditService>()
         .AddTransient<IIncomingService, IncomingService>()
         .AddSingleton<ICurrencyService, CurrencyService>();
 
@@ -60,6 +61,7 @@ public static class DomainDependencyInjectionExtension
             new UserMapperProfile(),
             new IncomingMapperProfile(),
             new SpendingMapperProfile(),
+            new CreditMapperProfile(),
             new CurrencyMapperProfile()
         }));
 
