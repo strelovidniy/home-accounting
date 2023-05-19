@@ -1,9 +1,7 @@
-﻿using HomeAccounting.Data.Entities;
-using HomeAccounting.Models;
+﻿using HomeAccounting.Models;
 using HomeAccounting.Models.Change;
 using HomeAccounting.Models.Create;
 using HomeAccounting.Models.Views;
-using Microsoft.AspNetCore.Http;
 
 namespace HomeAccounting.Domain.Services.Abstraction;
 
@@ -34,13 +32,13 @@ public interface IUserService
         CancellationToken cancellationToken = default
     );
 
-    Task<User> GetPureUserAsync(
-        Guid id,
+    public Task ChangeAvatarAsync(
+        byte[] avatar,
         CancellationToken cancellationToken = default
     );
 
-    public Task ChangeAvatarAsync(
-        IFormFile avatar,
+    public Task SaveMonobankApiTokenAsync(
+        SetMonobankTokenModel changePasswordModel,
         CancellationToken cancellationToken = default
     );
 }

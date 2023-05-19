@@ -26,6 +26,7 @@ internal class UserService : IUserService
     private readonly IEmailService _emailService;
     private readonly IUrlSettings _urlSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IMonoApiService _monoApiService;
     private readonly IMapper _mapper;
 
     public UserService(
@@ -33,7 +34,8 @@ internal class UserService : IUserService
         IEmailService emailService,
         IUrlSettings urlSettings,
         IHttpContextAccessor httpContextAccessor,
-        IMapper mapper
+        IMapper mapper,
+        IMonoApiService monoApiService
     )
     {
         _userRepository = userRepository;
@@ -41,6 +43,7 @@ internal class UserService : IUserService
         _urlSettings = urlSettings;
         _httpContextAccessor = httpContextAccessor;
         _mapper = mapper;
+        _monoApiService = monoApiService;
     }
 
     public async Task ResetPasswordAsync(
@@ -109,13 +112,6 @@ internal class UserService : IUserService
     ) => _mapper.Map<UserView>(await _userRepository
         .Query()
         .FirstOrDefaultAsync(user => user.Id == id, cancellationToken));
-    
-    public async Task<User> GetPureUserAsync(
-        Guid id,
-        CancellationToken cancellationToken = default
-    ) => await _userRepository
-        .Query()
-        .FirstOrDefaultAsync(user => user.Id == id, cancellationToken) ?? new User();
 
     public async Task ChangePasswordAsync(
         ChangePasswordModel changePasswordModel,
@@ -143,7 +139,7 @@ internal class UserService : IUserService
     }
 
     public async Task ChangeAvatarAsync(
-        IFormFile avatar,
+        byte[] avatar,
         CancellationToken cancellationToken = default
     )
     {
@@ -153,31 +149,47 @@ internal class UserService : IUserService
 
         RuntimeValidator.Assert(currentUser is not null, StatusCode.Unauthorized);
 
-        var fileExtension = Path.GetExtension(avatar.FileName);
+        var avatarName = $"{currentUser!.Id}.avatar";
 
-        RuntimeValidator.Assert(
-            fileExtension is not null and not "",
-            StatusCode.InvalidFileExtension
-        );
-
-        if (!fileExtension!.StartsWith("."))
-        {
-            fileExtension = "." + fileExtension;
-        }
-
-        var fileName = $"{currentUser!.Id}{fileExtension}";
+        var combine = Path.Combine(Directory.GetCurrentDirectory(),
+            "Files",
+            "Avatars");
 
         var filePath = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            "Files",
-            "Avatars",
-            fileName
+            combine,
+            avatarName
         );
 
-        await using var fileStream = new FileStream(filePath, FileMode.Create);
+        if (!Directory.Exists(combine))
+        {
+            Directory.CreateDirectory(combine);
+        }
 
-        await avatar.CopyToAsync(fileStream, cancellationToken);
+        await File.WriteAllBytesAsync(filePath, avatar, cancellationToken);
 
-        currentUser.ImageDataUrl = _urlSettings.WebApiUrl + "api/v1/users/avatars/" + fileName;
+        currentUser.ImageDataUrl = _urlSettings.WebApiUrl + "api/v1/users/avatars/" + avatarName;
+
+        await _userRepository.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task SaveMonobankApiTokenAsync(
+        SetMonobankTokenModel model,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var currentUser = await _userRepository
+                .Query()
+                .FirstOrDefaultAsync(user => user.Id == _httpContextAccessor.GetCurrentUserId(), cancellationToken)
+            ?? throw new ApiException(StatusCode.Unauthorized);
+
+        currentUser.MonobankToken = model.Token;
+
+        await _userRepository.SaveChangesAsync(cancellationToken);
+
+        await _monoApiService.SyncMonoOperationsAsync(
+            currentUser.Id,
+            currentUser.MonobankToken!,
+            cancellationToken: cancellationToken
+        );
     }
 }

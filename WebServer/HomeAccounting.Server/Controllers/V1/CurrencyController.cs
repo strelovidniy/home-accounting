@@ -12,7 +12,9 @@ public class CurrencyController : BaseController
 
     public CurrencyController(
         IServiceProvider services,
-        ICurrencyService currencyService, IMonoApiService monoApiService) : base(services)
+        ICurrencyService currencyService,
+        IMonoApiService monoApiService
+    ) : base(services)
     {
         _currencyService = currencyService;
         _monoApiService = monoApiService;
@@ -26,11 +28,4 @@ public class CurrencyController : BaseController
             cancellationToken
         )
     );
-    
-    [HttpGet]
-    [Route("statements")]
-    public async Task<IActionResult> GetStatementAsync(
-        CancellationToken cancellationToken = default
-    ) => Ok(
-        await _monoApiService.ReturnStatementAsync(CurrentUserId, DateTime.MinValue, DateTime.MaxValue, cancellationToken));
 }

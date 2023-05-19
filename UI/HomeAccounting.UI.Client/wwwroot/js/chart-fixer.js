@@ -9,7 +9,7 @@
         return;
     }
 
-    let newViewBoxValue = `${Number(viewBoxValues?.[0] ?? 0) - 30} ${viewBoxValues?.[1]} ${Number(viewBoxValues?.[2] ?? 0) + 30} ${viewBoxValues?.[3]}`;
+    let newViewBoxValue = `${Number(viewBoxValues?.[0] ?? 0) - 50} ${viewBoxValues?.[1]} ${Number(viewBoxValues?.[2] ?? 0) + 50} ${viewBoxValues?.[3]}`;
 
     svg.setAttribute('viewBox', newViewBoxValue);
 }

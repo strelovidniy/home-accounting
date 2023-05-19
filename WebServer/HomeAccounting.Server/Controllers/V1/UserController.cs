@@ -76,15 +76,18 @@ public class UserController : BaseController
 
     [HttpPost("change-avatar")]
     public async Task<IActionResult> ChangeAvatarAsync(
-        [FromForm] IFormFile avatar,
+        [FromForm] string fileContent,
         CancellationToken cancellationToken = default
     )
     {
-        await _userService.ChangeAvatarAsync(avatar, cancellationToken);
+        var decodedContent = Convert.FromBase64String(fileContent);
+
+        await _userService.ChangeAvatarAsync(decodedContent, cancellationToken);
 
         return Ok();
     }
 
+    [AllowAnonymous]
     [HttpGet("avatars/{imageName}")]
     public async Task<IActionResult> GetAvatarAsync(
         string imageName,
@@ -101,6 +104,17 @@ public class UserController : BaseController
             cancellationToken
         );
 
-        return File(avatar, $"image/{imageName.Split('.').Last()}");
+        return File(avatar, "image/png");
+    }
+
+    [HttpPut("monobank-token")]
+    public async Task<IActionResult> SaveMonobankToken(
+        [FromBody] SetMonobankTokenModel monobankToken,
+        CancellationToken cancellationToken = default
+    )
+    {
+        await _userService.SaveMonobankApiTokenAsync(monobankToken, cancellationToken);
+
+        return Ok();
     }
 }

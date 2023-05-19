@@ -49,18 +49,15 @@ internal class UserService : IUserService
         CancellationToken cancellationToken = default
     )
     {
-        using var multipartFormDataContent = new MultipartFormDataContent();
+        var base64Content = Convert.ToBase64String(bytes);
 
-        var stream = new MemoryStream();
-
-        stream.Write(bytes, 0, bytes.Length);
-
-        multipartFormDataContent.Add(new StreamContent(stream), "avatar");
+        var formData = new MultipartFormDataContent();
+        formData.Add(new StringContent(base64Content), "fileContent");
 
         return _httpClient
             .PostAsync(
                 "api/v1/users/change-avatar",
-                multipartFormDataContent,
+                formData,
                 cancellationToken
             );
     }

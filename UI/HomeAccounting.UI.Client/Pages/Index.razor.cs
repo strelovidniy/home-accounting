@@ -188,7 +188,7 @@ public partial class Index : IDisposable
         _series = series;
         _xAxisLabels = xAxisLabels.ToArray();
         _chartOptions.MaxNumYAxisTicks = 15;
-        _chartOptions.YAxisFormat = "$0";
+        _chartOptions.YAxisFormat = "0 UAH";
 
         _processing = false;
 

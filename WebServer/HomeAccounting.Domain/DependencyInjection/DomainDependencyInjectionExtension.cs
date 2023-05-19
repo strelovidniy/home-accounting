@@ -28,25 +28,21 @@ public static class DomainDependencyInjectionExtension
 
     private static IServiceCollection AddServices(
         this IServiceCollection services
-    )
-    {
-        services.AddHttpClient<MonoApiClient>().SetHandlerLifetime(TimeSpan.FromMinutes(3));
-
-        services.AddTransient<IMonoApiService>(x=> new MonoApiService(x.GetService<MonoApiClient>(), x.GetService<UserService>()));
-        return services
-                
-            .AddHttpContextAccessor()
-            .AddTransient<IEmailService, EmailService>()
-            .AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>()
-            .AddTransient<IValidationService, ValidationService>()
-            .AddTransient<IUserService, UserService>()
-            .AddTransient<IAuthService, AuthService>()
-            .AddTransient<ISpendingService, SpendingService>()
-            .AddTransient<ICreditService, CreditService>()
-            .AddTransient<IDepositService, DepositService>()
-            .AddTransient<IIncomingService, IncomingService>()
-            .AddSingleton<ICurrencyService, CurrencyService>();
-    }
+    ) => services
+        .AddHttpContextAccessor()
+        .AddHttpClient<MonoApiClient>().SetHandlerLifetime(TimeSpan.FromMinutes(3))
+        .Services
+        .AddTransient<IEmailService, EmailService>()
+        .AddTransient<IRazorViewToStringRenderer, RazorViewToStringRenderer>()
+        .AddTransient<IValidationService, ValidationService>()
+        .AddTransient<IUserService, UserService>()
+        .AddTransient<IAuthService, AuthService>()
+        .AddTransient<ISpendingService, SpendingService>()
+        .AddTransient<ICreditService, CreditService>()
+        .AddTransient<IDepositService, DepositService>()
+        .AddTransient<IIncomingService, IncomingService>()
+        .AddSingleton<ICurrencyService, CurrencyService>()
+        .AddTransient<IMonoApiService, MonoApiService>();
 
     // validators
     private static IServiceCollection AddValidators(
@@ -72,7 +68,7 @@ public static class DomainDependencyInjectionExtension
             new SpendingMapperProfile(),
             new CreditMapperProfile(),
             new CurrencyMapperProfile(),
-            new DepositMapperProfile(),
+            new DepositMapperProfile()
         }));
 
     private static IServiceCollection AddSettings(

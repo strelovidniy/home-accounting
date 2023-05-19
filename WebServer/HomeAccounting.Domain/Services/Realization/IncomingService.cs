@@ -112,12 +112,22 @@ internal class IncomingService : IIncomingService
         return _mapper.Map<IncomingView>(incoming!);
     }
 
-    public Task<decimal> GetAverageIncomingAsync(
+    public async Task<decimal> GetAverageIncomingAsync(
         Guid userId,
         CancellationToken cancellationToken = default
-    ) => _incomingRepository
-        .Query()
-        .Where(x => x.UserId == userId)
-        .Select(x => x.Amount)
-        .AverageAsync(cancellationToken);
+    )
+    {
+        try
+        {
+            return await _incomingRepository
+                .Query()
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Amount)
+                .AverageAsync(cancellationToken);
+        }
+        catch
+        {
+            return 0M;
+        }
+    }
 }

@@ -112,12 +112,22 @@ internal class SpendingService : ISpendingService
         return _mapper.Map<SpendingView>(spending!);
     }
 
-    public Task<decimal> GetAverageSpendingAsync(
+    public async Task<decimal> GetAverageSpendingAsync(
         Guid userId,
         CancellationToken cancellationToken = default
-    ) => _spendingRepository
-        .Query()
-        .Where(x => x.UserId == userId)
-        .Select(x => x.Amount)
-        .AverageAsync(cancellationToken);
+    )
+    {
+        try
+        {
+            return await _spendingRepository
+                .Query()
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Amount)
+                .AverageAsync(cancellationToken);
+        }
+        catch
+        {
+            return 0M;
+        }
+    }
 }

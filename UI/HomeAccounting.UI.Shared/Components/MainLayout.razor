@@ -59,27 +59,18 @@ else
                  OffsetX="true"
                  Dense="true">
             <ActivatorContent>
-                @if (string.IsNullOrEmpty(_currentUser?.ImageDataUrl))
-                {
-                    <MudAvatar Color="Color.Success"
-                               Rounded="true"
-                               Style="background-color: #FFD580 !important; 
-                                      color: black !important; 
-                                      font-size: 15px !important;
-                                      height: 40px !important;
-                                      width: fit-content;
-                                      padding: 0 15px">
-                        <strong>
-                            @_fullName
-                        </strong>
-                    </MudAvatar>
-                }
-                else
-                {
-                    <MudAvatar Image="@_currentUser.ImageDataUrl"
-                               Style="height: 50px; width: 50px;">
-                    </MudAvatar>
-                }
+                <MudAvatar Color="Color.Success"
+                           Rounded="true"
+                           Style="background-color: #FFD580 !important; 
+                                  color: black !important; 
+                                  font-size: 15px !important;
+                                  height: 40px !important;
+                                  width: fit-content;
+                                  padding: 0 15px">
+                    <strong>
+                        @_fullName
+                    </strong>
+                </MudAvatar>
             </ActivatorContent>
             <ChildContent>
                 <UserCard Class="mt-n2"
