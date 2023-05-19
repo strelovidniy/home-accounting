@@ -13,19 +13,21 @@ internal class ValidationService : IValidationService
     private readonly IRepository<User> _userRepository;
     private readonly IRepository<Spending> _spendingRepository;
     private readonly IRepository<Incoming> _incomingRepository;
+    private readonly IRepository<Credit> _creditRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public ValidationService(
         IRepository<User> userRepository,
         IHttpContextAccessor httpContextAccessor,
         IRepository<Spending> spendingRepository,
-        IRepository<Incoming> incomingRepository
-    )
+        IRepository<Incoming> incomingRepository, 
+        IRepository<Credit> creditRepository)
     {
         _userRepository = userRepository;
         _httpContextAccessor = httpContextAccessor;
         _spendingRepository = spendingRepository;
         _incomingRepository = incomingRepository;
+        _creditRepository = creditRepository;
     }
 
     public Task<bool> IsUserExistsAsync(

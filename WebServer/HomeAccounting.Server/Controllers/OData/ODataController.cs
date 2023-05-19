@@ -4,6 +4,7 @@ using HomeAccounting.Data.Entities;
 using HomeAccounting.Domain.Extensions;
 using HomeAccounting.Models.Views;
 using HomeAccounting.UI.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData.Extensions;
 using Microsoft.AspNetCore.OData.Query;
@@ -11,7 +12,7 @@ using ODataControllerBase = Microsoft.AspNetCore.OData.Routing.Controllers.OData
 
 namespace HomeAccounting.Server.Controllers.OData;
 
-//[Authorize]
+[Authorize]
 [Route("api/odata")]
 public class ODataController : ODataControllerBase
 {
@@ -80,4 +81,26 @@ public class ODataController : ODataControllerBase
         ),
         (int) (options.Request.ODataFeature().TotalCount ?? 0)
     ));
+    
+    [HttpGet("credits")]
+    public IActionResult GetCredits(
+        ODataQueryOptions<Credit> options,
+        [FromServices] IRepository<Credit> repository
+    ) 
+    {
+        return Ok(new ODataResponse<CreditView>(
+            options.Context.ToString() ?? string.Empty,
+            _mapper.Map<List<CreditView>>(
+                options
+                    .ApplyTo(
+                        repository
+                            .Query()
+                            .Where(credit => credit.UserId == CurrentUserId)
+                    )
+                    .Cast<Credit>()
+                    .ToList()
+            ),
+            (int)(options.Request.ODataFeature().TotalCount ?? 0)
+        ));
+    }
 }

@@ -32,4 +32,5 @@ public class User : Entity, IEntity
     public IEnumerable<Spending> Spendings { get; set; } = new List<Spending>();
 
     public IEnumerable<Incoming> Incomings { get; set; } = new List<Incoming>();
+    public IEnumerable<Credit> Credits { get; set; } = new List<Credit>();
 }
