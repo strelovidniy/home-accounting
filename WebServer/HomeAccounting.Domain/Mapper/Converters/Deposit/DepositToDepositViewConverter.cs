@@ -16,6 +16,9 @@ internal class DepositToDepositViewConverter : ITypeConverter<Data.Entities.Depo
         Amount = deposit.Amount,
         Description = deposit.Description,
         DepositDate = deposit.CreatedAt,
+        DepositCompoundingFrequency = deposit.CompoundingFrequency,
+        DepositNumberOfYears = deposit.NumberOfYears,
+        DepositRateOfInterest = deposit.RateOfInterest,
         DepositUpdatedAt = deposit.UpdatedAt
     };
 }

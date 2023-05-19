@@ -88,6 +88,15 @@ else
                 <MudTd DataLabel="Description">
                     @context.Description
                 </MudTd>
+                <MudTd DataLabel="DepositRateOfInterest">
+                    @context.DepositRateOfInterest
+                </MudTd>
+                <MudTd DataLabel="DepositCompoundingFrequency">
+                    @context.DepositCompoundingFrequency
+                </MudTd>
+                <MudTd DataLabel="DepositNumberOfYears">
+                    @context.DepositNumberOfYears
+                </MudTd>
                 <MudTd DataLabel="DepositDate">
                     @context.DepositDate
                 </MudTd>
@@ -123,6 +132,24 @@ else
                     <MudTableSortLabel SortLabel="Description"
                                        T="DepositView">
                         Description
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="DepositRateOfInterest"
+                                       T="DepositView">
+                        Deposit Rate of Interest
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="DepositCompoundingFrequency"
+                                       T="DepositView">
+                        Deposit Compounding Frequency
+                    </MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudTableSortLabel SortLabel="DepositNumberOfYears"
+                                       T="DepositView">
+                        Number of Years
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>

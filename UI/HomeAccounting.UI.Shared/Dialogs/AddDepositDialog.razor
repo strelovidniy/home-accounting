@@ -37,6 +37,39 @@
                                   Validation="@ValidateDescriptionField" />
                     </MudItem>
 
+                    <MudItem xs="12">
+                        <MudNumericField T="int"
+                                         Label="Rate Of Interest"
+                                         Variant="Variant.Outlined"
+                                         id="depositCompoundingFrequency"
+                                         Name="depositCompoundingFrequency"
+                                         @bind-Value="@_model.CompoundingFrequency"
+                                         For="@(() => _model.CompoundingFrequency)"
+                                         />
+                    </MudItem>
+                    
+                    <MudItem xs="12">
+                        <MudNumericField T="int"
+                                         Label="Number of Years"
+                                         Variant="Variant.Outlined"
+                                         id="depositNumberOfYears"
+                                         Name="depositNumberOfYears"
+                                         @bind-Value="@_model.NumberOfYears"
+                                         For="@(() => _model.NumberOfYears)"
+                        />
+                    </MudItem>
+                    
+                    <MudItem xs="12">
+                        <MudNumericField T="int"
+                                         Label="Deposit Rate of Interest"
+                                         Variant="Variant.Outlined"
+                                         id="depositRateOfInterest"
+                                         Name="depositRateOfInterest"
+                                         @bind-Value="@_model.RateOfInterest"
+                                         For="@(() => _model.NumberOfYears)"
+                        />
+                    </MudItem>
+                    
                     <MudItem Class="d-flex justify-center"
                          xs="12">
                         <MudButton ButtonType="ButtonType.Submit"

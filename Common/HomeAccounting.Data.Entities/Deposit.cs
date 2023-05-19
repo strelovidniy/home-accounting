@@ -7,6 +7,9 @@ public class Deposit : Entity, IEntity
     public Guid UserId { get; set; }
 
     public decimal Amount { get; set; }
+    public int RateOfInterest { get; set; } // in percentage
+    public int NumberOfYears { get; set; } 
+    public int CompoundingFrequency { get; set; } 
 
     public string? Description { get; set; }
 
