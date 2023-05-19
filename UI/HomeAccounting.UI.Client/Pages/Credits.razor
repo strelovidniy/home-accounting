@@ -5,7 +5,7 @@
 @using MudBlazor
 
 <PageTitle>
-    Incoming
+    Credits
 </PageTitle>
 
 @if (_isPageLoading)
@@ -23,7 +23,7 @@ else
               Class="border">
         <MudText Typo="Typo.h6"
                  Class="px-4 py-2">
-            Incoming
+            Credit
         </MudText>
         <MudTable @ref="_table"
                   Dense="@false"
@@ -40,7 +40,7 @@ else
                                Variant="Variant.Filled"
                                Color="Color.Primary"
                                Class="mr-2 mb-2">
-                        Add Incoming
+                        Add Credit
                     </MudButton>
                 </div>
                 <SpinLoader IsLoading="_isLoading" 
@@ -88,10 +88,10 @@ else
                 <MudTd DataLabel="Description">
                     @context.Description
                 </MudTd>
-                <MudTd DataLabel="IncomingDate">
+                <MudTd DataLabel="CreditDate">
                     @context.CreditDate
                 </MudTd>
-                <MudTd DataLabel="IncomingUpdatedAt">
+                <MudTd DataLabel="CreditUpdatedAt">
                     @context.CreditUpdatedAt
                 </MudTd>
             </RowTemplate>
@@ -114,27 +114,27 @@ else
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel SortLabel="Amount"
-                                       T="IncomingView">
+                                       T="CreditView">
                         Amount
                     </MudTableSortLabel>
 
                 </MudTh>
                 <MudTh>
                     <MudTableSortLabel SortLabel="Description"
-                                       T="IncomingView">
+                                       T="CreditView">
                         Description
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel SortLabel="IncomingDate"
-                                       T="IncomingView">
-                        Incoming Date
+                    <MudTableSortLabel SortLabel="CreditDate"
+                                       T="CreditView">
+                        Credit Date
                     </MudTableSortLabel>
                 </MudTh>
                 <MudTh>
-                    <MudTableSortLabel SortLabel="IncomingUpdatedAt"
-                                       T="IncomingView">
-                        Incoming Updated At
+                    <MudTableSortLabel SortLabel="CreditUpdatedAt"
+                                       T="CreditView">
+                        Credit Updated At
                     </MudTableSortLabel>
                 </MudTh>
             </HeaderContent>

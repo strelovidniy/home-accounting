@@ -68,7 +68,7 @@ public partial class Credits : IDisposable
             { nameof(AddCreditDialog.CurrentUser), _currentUser }
         };
 
-        var dialog = await DialogService.ShowAsync<AddCreditDialog>("Add credit", parameters, _dialogOptions);
+        var dialog = await DialogService.ShowAsync<AddCreditDialog>("Add Credit", parameters, _dialogOptions);
 
         var result = await dialog.Result;
 
