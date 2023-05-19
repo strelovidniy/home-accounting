@@ -164,6 +164,28 @@ public partial class Credits : IDisposable
             .Top(state.PageSize)
             .Skip(state.PageSize * state.Page);
         
+        builder = state.SortDirection switch
+        {
+            SortDirection.None => builder,
+            SortDirection.Ascending => state.SortLabel switch
+            {
+                "Description" => builder.OrderBy(o => o.Description),
+                "CreditDate" => builder.OrderBy(o => o.CreditDate),
+                "Amount" => builder.OrderBy(o => o.Amount),
+                "CreditUpdatedAt" => builder.OrderBy(o => o.CreditUpdatedAt),
+                _ => builder
+            },
+            SortDirection.Descending => state.SortLabel switch
+            {
+                "Description" => builder.OrderByDescending(o => o.Description),
+                "CreditDate" => builder.OrderByDescending(o => o.CreditDate),
+                "Amount" => builder.OrderByDescending(o => o.Amount),
+                "CreditUpdatedAt" => builder.OrderByDescending(o => o.CreditUpdatedAt),
+                _ => builder
+            },
+            _ => builder
+        };
+        
         if (!string.IsNullOrWhiteSpace(_searchString))
         {
             builder = builder.Filter(

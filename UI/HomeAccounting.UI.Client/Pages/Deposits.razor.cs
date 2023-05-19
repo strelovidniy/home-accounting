@@ -164,6 +164,28 @@ public partial class Deposits : IDisposable
             .Top(state.PageSize)
             .Skip(state.PageSize * state.Page);
         
+        builder = state.SortDirection switch
+        {
+            SortDirection.None => builder,
+            SortDirection.Ascending => state.SortLabel switch
+            {
+                "Description" => builder.OrderBy(o => o.Description),
+                "DepositDate" => builder.OrderBy(o => o.DepositDate),
+                "Amount" => builder.OrderBy(o => o.Amount),
+                "IncomingUpdatedAt" => builder.OrderBy(o => o.DepositUpdatedAt),
+                _ => builder
+            },
+            SortDirection.Descending => state.SortLabel switch
+            {
+                "Description" => builder.OrderByDescending(o => o.Description),
+                "DepositDate" => builder.OrderByDescending(o => o.DepositDate),
+                "Amount" => builder.OrderByDescending(o => o.Amount),
+                "DepositUpdatedAt" => builder.OrderByDescending(o => o.DepositUpdatedAt),
+                _ => builder
+            },
+            _ => builder
+        };
+        
         if (!string.IsNullOrWhiteSpace(_searchString))
         {
             builder = builder.Filter(
