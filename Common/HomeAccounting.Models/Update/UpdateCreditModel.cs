@@ -1,8 +1,8 @@
 ﻿namespace HomeAccounting.Models.Update;
 
-public class UpdateDepositModel : IValidatableModel
+public class UpdateCreditModel : IValidatableModel
 {
-    public Guid IncomingId { get; set; }
+    public Guid CreditId { get; set; }
 
     public string? Description { get; set; }
 }
