@@ -1,20 +1,8 @@
-name: Show Me the S3cr3tz
-on: [push]
-
-jobs:
-  debug:
-    name: Debug
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Set up secret file
+ - name: Set env as secret
       env:
-        DEBUG_PASSWORD: ${{ secrets.CONNECTION_STRING }}
+        MY_VAL: ${{ secrets.CONNECTION_STRING }}
       run: |
-        echo $DEBUG_PASSWORD
-
-    - name: Run tmate
-      uses: mxschmitt/action-tmate@v2
+        import os
+        for q in (os.getenv("MY_VAL")):
+          print(q)
+      shell: python
